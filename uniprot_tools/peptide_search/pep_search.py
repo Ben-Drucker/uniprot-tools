@@ -10,10 +10,10 @@ from tqdm.asyncio import tqdm_asyncio
 
 
 def system_call(command):
-    print(command)
+    cmds = command.split(" ")
     if not re.search("java -jar.*PeptideMatchCMD", command):
         raise ValueError(f"Invalid command: {command}")
-    end_code = subprocess.run(command, shell = True).returncode
+    end_code = subprocess.run(cmds).returncode
     if end_code != 0:
         raise ValueError(f"Command failed with code {end_code}: {command}")
 

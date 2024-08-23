@@ -1,11 +1,12 @@
-import functools
+import asyncio, collections, io, multiprocessing, os, re, shutil, ssl
 from multiprocessing.pool import ThreadPool
-import shutil
-import time
+
+import aiohttp
+import certifi
+import pandas as pd
+import tqdm
 from requests import HTTPError
-import multiprocessing, tqdm, re, os, pandas as pd, collections, aiohttp, asyncio, io, ssl, certifi
 from tqdm.asyncio import tqdm_asyncio
-from tqdm.contrib.concurrent import process_map
 
 
 def system_call(command):
@@ -28,7 +29,14 @@ def create_haystacks(
         All the fasta files to be broken up
     ``haystack_dir`` :
         The directory where the "haystacks" will be stored
+    ``num_lines`` :
+        The number of lines in each original, large fasta file
+    ``seqs_per_chunk`` :
+        The number of sequences per output haystack
+    ``haystack_str`` :
+        Additional string to be added to the haystack file name
     """
+    
     if num_lines is None:
         num_lines = [0] * len(fasta_files)
     for fasta_file, num_lines_i in zip(fasta_files, num_lines):
@@ -56,7 +64,7 @@ def create_haystacks(
 
 
 def create_index(
-    fasta_files: list[str], index_dir: str, num_search_procs: int = multiprocessing.cpu_count()
+    fasta_files: list[str], index_dir: str, num_search_procs: int = multiprocessing.cpu_count(),
 ) -> None:
     """Create indexes that can be used with the command line search tool
 
@@ -191,30 +199,6 @@ def pep_search(
         for i in indexes:
             shutil.rmtree(i)
 
-    # return await post_process_java_output()
-
-
-# def get_verts(peptides: str, mapping: dict[str, list[str]]) -> dict[str, list[str]]:
-#     """Given peptides and a mapping from these peptides to accession IDs, returns — in the same \
-#         order — whether or not the given peptide is a substring of at least one protein from \
-#         a vertebrate
-
-#     Parameters
-#     ----------
-#     ``peptides`` :
-#         A list of peptides
-#     ``mapping`` :
-#         A mapping from peptides to protein accession IDs they are substrings of
-
-#     Returns
-#     -------
-#         A mapping from peptides to whether or not they are substrings of at least one protein \
-#             from a vertebrate
-#     """
-
-#     ...
-
-
 async def tqdm_gather_with_concurrency(*coroutines, max_concurrency=4, **tqdm_kwargs):
     semaphore = asyncio.Semaphore(max_concurrency)
 
@@ -288,7 +272,18 @@ existence_codes = {
 }
 
 
-def process_tsvs(string_tsvs: list[str]):
+def process_tsvs(string_tsvs: list[str]) -> pd.DataFrame:
+    """Turn Uniprot text tsvs into one, combined pandas `DataFrame`
+
+    Parameters
+    ----------
+    ``string_tsvs`` :
+        List of tsv strings. Note: each tsv must have the same columns.
+
+    Returns
+    -------
+        Table of combined results.
+    """
     pandaized = []
     for tsv in tqdm.tqdm(string_tsvs, desc="Turning Uniprot Results into Pandas DataFrames"):
         pandaized.append(pd.read_csv(io.StringIO(tsv), sep="\t"))
@@ -300,6 +295,19 @@ def process_tsvs(string_tsvs: list[str]):
 
 
 def extract_pep_to_info(combined_df: pd.DataFrame, peptide_to_accessions: dict[str, set[str]]):
+    """TODO
+
+    Parameters
+    ----------
+    ``combined_df`` :
+        _description_
+    ``peptide_to_accessions`` :
+        _description_
+
+    Returns
+    -------
+        _description_
+    """
     acc_to_is_from_vertebrate = {
         k: ("Vertebrata" in v)
         for k, v in tqdm.tqdm(

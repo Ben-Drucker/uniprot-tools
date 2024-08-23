@@ -7,10 +7,12 @@ import pandas as pd
 import tqdm, subprocess
 from requests import HTTPError
 from tqdm.asyncio import tqdm_asyncio
+from shlex import split, quote
 
 
-def system_call(command):
-    cmds = command.split(" ")
+def _system_call(command):
+    cmds_sanitized = quote(command)
+    cmds = split(cmds_sanitized)
     if not re.search("java -jar.*PeptideMatchCMD", command):
         raise ValueError(f"Invalid command: {command}")
     end_code = subprocess.run(cmds).returncode
@@ -92,7 +94,7 @@ def create_index(
     )
 
     with ThreadPool(processes=num_search_procs) as pool:
-        pool.map(system_call, commands)
+        pool.map(_system_call, commands)
 
 
 class CustomTQDM(tqdm.tqdm):
@@ -211,7 +213,7 @@ def pep_search(
     )
     assert len(commands) > 0, f"No indexes found in {index_dir}"
     with ThreadPool(processes=num_search_procs) as pool:
-        pool.map(system_call, commands)
+        pool.map(_system_call, commands)
 
     if delete_index_when_done:
         for i in indexes:

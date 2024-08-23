@@ -1,6 +1,9 @@
-import tqdm
-from typing import Callable, Literal, Iterable
-from multiprocessing import cpu_count, pool as mpp
+import multiprocessing, random, time, warnings
+from multiprocessing import cpu_count
+from multiprocessing import pool as mpp
+from typing import Callable, Iterable, Literal
+
+import requests, tqdm
 
 
 class TqdmParallel:
@@ -104,9 +107,11 @@ class TqdmParallel:
         cleanup_fn()
         print("Parallel tasks successfully finished!")
         return results
-    
+
     @classmethod
-    def _istarmap(cls, p: mpp.Pool | mpp.ThreadPool, func: Callable, iterable: Iterable, chunksize=1):
+    def _istarmap(
+        cls, p: mpp.Pool | mpp.ThreadPool, func: Callable, iterable: Iterable, chunksize=1
+    ):
         """
         Notes
         -----
@@ -124,10 +129,6 @@ class TqdmParallel:
             )
         )
         return (item for chunk in result for item in chunk)
-
-import requests, warnings, time, random
-from typing import Literal
-import multiprocessing
 
 
 def request_worker(url: str, request_kwargs: dict | None = None) -> str | requests.HTTPError:

@@ -1,11 +1,10 @@
-import multiprocessing, os, random, re, time, warnings
+import re, warnings
 from typing import Literal
 
-import numpy as np
-import requests
 import tqdm
 
 from .concurrency_tools import TqdmParallel, request_worker
+
 
 def accession_to_prot_info(
     accessions: list[str] | list[int],

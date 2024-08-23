@@ -1,5 +1,8 @@
-import tqdm, os, numpy as np
+import os
 from typing import Literal
+
+import numpy as np
+import tqdm
 
 
 def read_fasta(infile: str, sort_keys: bool = True) -> dict[str, str]:

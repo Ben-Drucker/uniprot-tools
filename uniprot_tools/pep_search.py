@@ -1,13 +1,13 @@
-import asyncio, collections, io, multiprocessing, os, re, shutil, ssl
+import asyncio, collections, io, multiprocessing, os, re, shutil, ssl, subprocess
 from multiprocessing.pool import ThreadPool
+from shlex import quote, split
 
 import aiohttp
 import certifi
 import pandas as pd
-import tqdm, subprocess
+import tqdm
 from requests import HTTPError
 from tqdm.asyncio import tqdm_asyncio
-from shlex import split, quote
 
 
 def _system_call(command):

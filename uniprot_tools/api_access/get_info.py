@@ -7,15 +7,11 @@ from typing import Callable, Iterable, Literal
 import numpy as np
 import requests
 import tqdm
-from pep_search import process_tsvs
-
-# from requests.adapters import HTTPAdapter
-
-# s = requests.Session()
-# s.mount('https://rest.uniprot.org', HTTPAdapter(max_retries=5000))
 
 
-def request_worker(url: str, request_kwargs: dict = {}) -> str | requests.HTTPError:
+def request_worker(url: str, request_kwargs: dict | None = None) -> str | requests.HTTPError:
+    if request_kwargs is None:
+        request_kwargs = {}
     if "timeout" not in request_kwargs:
         request_kwargs["timeout"] = 5
 
@@ -42,9 +38,14 @@ def request_worker(url: str, request_kwargs: dict = {}) -> str | requests.HTTPEr
 def parallel_requests(
     urls: list[str],
     num_concurrent: int | Literal["num_urls", "num_cores"] = "num_cores",
-    request_kwargs: dict = {},
-    prog_bar_kwargs: dict = {},
+    request_kwargs: dict | None = None,
+    prog_bar_kwargs: dict | None = None,
 ):
+    if prog_bar_kwargs is None:
+        prog_bar_kwargs = {}
+
+    if request_kwargs is None:
+        request_kwargs = {}
     results = []
     match num_concurrent:
         case "num_urls":
@@ -168,20 +169,57 @@ def istarmap(p: Pool | ThreadPool, func: Callable, iterable: Iterable, chunksize
 
 
 class TqdmParallel:
+    """Class for running a function in parallel with tqdm"""
+
     @classmethod
     def tqdm_starmap(
         cls,
-        worker_fn,
-        worker_args,
+        worker_fn: Callable,
+        worker_args: list[tuple],
         num_workers=multiprocessing.cpu_count() - 1,
         cleanup_fn=lambda: None,
         processes_or_threads: Literal["processes", "threads"] = "processes",
         tqdm_class=tqdm.tqdm,
         **tqdm_kwargs,
     ):
+        """Run a function in parallel with tqdm
+
+        Parameters
+        ----------
+        ``worker_fn`` :
+            The function to run in parallel
+        ``worker_args`` :
+            List of tuples of arguments to pass to the function. Each tuple is passed to the \
+                ``worker_fn``'s ``*args``.
+        ``num_workers`` :
+            The number of workers to use. Defaults to the number of cores - 1.
+        ``cleanup_fn`` :
+            The function to call when the workers are finished. Defaults to a no-op function.
+        ``processes_or_threads`` :
+            Whether to use multiprocessing or threading. Defaults to multiprocessing.
+        ``tqdm_class`` :
+            The tqdm class to use. Defaults to ``tqdm.tqdm``, but could also be, for example, \
+                ``tqdm.tqdm_notebook``.
+        ``tqdm_kwargs`` :
+            Additional keyword arguments to pass to the tqdm class. Some possible options include::
+
+                desc=
+                leave=
+                ncols=
+                ascii=
+                disable=
+                unit=
+                unit_scale=
+                dynamic_ncols=
+                smoothing=
+                position=
+
+        """
+
         def end_actions(
             pool: Pool | ThreadPool | None, partial_results: list, num_expected_results: int
         ):
+            tqdm.tqdm()
             if pool is not None:
                 pool.terminate()
                 pool.close()
@@ -229,9 +267,6 @@ class TqdmParallel:
         cleanup_fn()
         print("Parallel tasks successfully finished!")
         return results
-
-
-"""https://rest.uniprot.org/uniparc/stream?compressed=true&fields=upi,organism,accession,organism_id,protein&format=tsv&query=%28%28uniparc%3AUPI001FEE9A09%29+OR+%28uniparc%3AUPI001FEEEFDE%29+OR+%28uniparc%3AUPI001FF6F0CB%29+OR+%28uniparc%3AUPI001FFAC6BE%29%29"""
 
 
 def accession_to_prot_info(

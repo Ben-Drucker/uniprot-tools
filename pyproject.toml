@@ -1,0 +1,28 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[project]
+name = "uniprot_tools"
+version = "0.0.1"
+authors = [
+  { name="Ben Drucker", email="ben.drucker@icloud.com" },
+]
+description = "Useful tools when working with Uniprot.org"
+readme = "README.md"
+requires-python = ">=3.12"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "pandas",
+    "requests",
+    "tqdm",
+    "numpy"
+]
+license = {file = "LICENSE"}
+keywords = ["uniprot", "tools", "parallel", "api"]

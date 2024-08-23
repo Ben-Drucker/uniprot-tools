@@ -4,14 +4,18 @@ from multiprocessing.pool import ThreadPool
 import aiohttp
 import certifi
 import pandas as pd
-import tqdm
+import tqdm, subprocess
 from requests import HTTPError
 from tqdm.asyncio import tqdm_asyncio
 
 
 def system_call(command):
     print(command)
-    return os.system(command)
+    if not re.search("java -jar.*PeptideMatchCMD", command):
+        raise ValueError(f"Invalid command: {command}")
+    end_code = subprocess.run(command, shell = True).returncode
+    if end_code != 0:
+        raise ValueError(f"Command failed with code {end_code}: {command}")
 
 
 def create_haystacks(
@@ -101,11 +105,25 @@ class CustomTQDM(tqdm.tqdm):
 def post_process_java_output(
     max_concurrency: int = 4, files: list[str] = []
 ) -> dict[str, set[str]]:
+    """Based on outputs to java command line peptide search tool, produce a mapping from peptides \
+        to sets of proteins
+
+    Parameters
+    ----------
+    ``max_concurrency`` :
+        The number of threads to use when searching. Each thread will handle one peptide.
+    ``files`` :
+        The files to post process.
+
+    Returns
+    -------
+        Mapping from each peptide found in the input files to sets of proteins
+    """
     args = [{"pep_search_file": x, "tid": i} for i, x in enumerate(files)]
     results = []
-    with multiprocessing.Pool(processes=max_concurrency) as pool:
+    with ThreadPool(processes=max_concurrency) as pool:
         with tqdm.tqdm(desc="Post Processing Progress", smoothing=0.1, total=len(args)) as pb:
-            for res in pool.imap_unordered(post_process_java_output_worker, args):
+            for res in pool.imap_unordered(_post_process_java_output_worker, args):
                 results.append(res)
                 pb.update(1)
 
@@ -116,7 +134,7 @@ def post_process_java_output(
     return updated_together
 
 
-def post_process_java_output_worker(kwargs) -> dict[str, set[str]]:
+def _post_process_java_output_worker(kwargs) -> dict[str, set[str]]:
     pep_search_file = kwargs["pep_search_file"]
     tid = kwargs["tid"]
     with open(pep_search_file) as fp:

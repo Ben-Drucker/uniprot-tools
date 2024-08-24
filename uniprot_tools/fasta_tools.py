@@ -2,6 +2,7 @@ import os
 from typing import Literal
 
 import numpy as np
+import pandas as pd
 import tqdm
 
 
@@ -66,16 +67,17 @@ def write_fasta(
     if seq_descriptions is None:
         seq_descriptions = [f"Seq-{i}" for i in range(len(seqs))]
 
+    df = pd.DataFrame({"Seq": seqs, "Description": seq_descriptions})
+    if only_unique:
+        df = df.drop_duplicates(subset=["Seq"], keep="first")
     if do_sort:
         match sort_by_desc_or_seq:
             case "desc":
-                argsort = np.argsort(seq_descriptions)
+                df = df.sort_values(by="Description")
             case "seq":
-                argsort = np.argsort(seqs)
-        seqs, seq_descriptions = [seqs[i] for i in argsort], [seq_descriptions[i] for i in argsort]
-    if only_unique:
-        unq_tuples = list(set(zip(seqs, seq_descriptions)))
-        seqs, seq_descriptions = [i[0] for i in unq_tuples], [i[1] for i in unq_tuples]
+                df = df.sort_values(by="Seq")
+
+    seqs, seq_descriptions = list(df["Seq"]), list(df["Description"])
     with open(outfile, "w") as fp:
         for i, seq in enumerate(seqs):
             fp.write(f">{seq_descriptions[i]}\n{seq}\n")

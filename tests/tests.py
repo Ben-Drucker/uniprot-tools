@@ -1,4 +1,6 @@
-import os, unittest
+import contextlib, io, json, os, unittest
+
+import pandas as pd
 
 
 def compare_files(file1, file2):
@@ -22,8 +24,6 @@ class TestFasta(unittest.TestCase):
         return super().tearDown()
 
     def test_read_fasta(self):
-        import contextlib, io, json
-
         from uniprot_tools.fasta_tools import read_fasta
 
         no_sort = read_fasta(
@@ -118,8 +118,84 @@ class TestPepSearch(unittest.TestCase):
 
 class TestGetInfo(unittest.TestCase):
     def setUp(self) -> None:
-        from uniprot_tools.get_info import accession_to_prot_info
+
+        with open("tests/test_data/test_ids.json") as f:
+            ids = json.load(f)
+            self.uniprotkb_ids = ids["uniprotkb_ids"]
+            self.uniparc_ids = ids["uniparc_ids"]
+            self.taxonomy_ids = ids["taxonomy_ids"]
+
+        self.uniprotkb_cols = [
+            "accession",
+            "reviewed",
+            "protein_name",
+            "gene_names",
+            "organism_name",
+            "cc_alternative_products",
+        ]
+
+        self.uniparc_cols = [
+            "upi",
+            "accession",
+            "organism",
+            "protein",
+        ]
+
+        self.taxonomy_cols = [
+            "id",
+            "common_name",
+            "scientific_name",
+            "lineage",
+        ]
 
         return super().setUp()
 
-    def test_accession_to_prot_info(self): ...
+    def _url_test(self, knowledge_base):
+        from uniprot_tools.get_info import accession_to_prot_info
+
+        urls = accession_to_prot_info(
+            self.__dict__[f"{knowledge_base}_ids"],
+            self.__dict__[f"{knowledge_base}_cols"],
+            knowledge_base=knowledge_base,
+            get_urls_only=True,
+        )
+        with open(f"tests/ground_truth/{knowledge_base}_urls.json") as f:
+            ground_truth_urls = json.load(f)
+        self.assertEqual(urls, ground_truth_urls)
+
+    def _info_test(self, knowledge_base):
+        from pandas.testing import assert_frame_equal
+
+        from uniprot_tools.get_info import accession_to_prot_info
+        from uniprot_tools.pep_search import process_tsvs
+
+        tsvs = accession_to_prot_info(
+            self.__dict__[f"{knowledge_base}_ids"],
+            self.__dict__[f"{knowledge_base}_cols"],
+            knowledge_base=knowledge_base,
+        )
+        self.assertIsNotNone(tsvs)
+        assert tsvs  # for linter purposes
+        this_table = process_tsvs(tsvs)
+
+        ground_truth_table = pd.read_csv(f"tests/ground_truth/{knowledge_base}_info_table.csv")
+
+        assert_frame_equal(this_table, ground_truth_table)
+
+    def test_uniprotkb_urls(self):
+        self._url_test("uniprotkb")
+
+    def test_uniparc_urls(self):
+        self._url_test("uniparc")
+
+    def test_taxonomy_urls(self):
+        self._url_test("taxonomy")
+
+    def test_uniprotkb_info(self):
+        self._info_test("uniprotkb")
+
+    def test_uniparc_info(self):
+        self._info_test("uniparc")
+
+    def test_tax_info(self):
+        self._info_test("taxonomy")

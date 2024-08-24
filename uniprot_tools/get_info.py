@@ -31,7 +31,7 @@ def accession_to_prot_info(
     Raises
     ------
         ``ValueError`` :
-            If ``knowledge_base`` is not one of ``uniprotkb`` or ``uniparc``
+            If ``knowledge_base`` is not one of ``uniprotkb`` or ``uniparc`` or ``taxonomy``
 
     Notes
     -----
@@ -77,7 +77,7 @@ def accession_to_prot_info(
             correct_id_pat = r"\d+"
             query_specifier = "tax_id"
         case _:  # type: ignore
-            raise ValueError("`database` must be either `uniprotkb` or `uniparc`")
+            raise ValueError("`database` must be either `uniprotkb`, `uniparc`, or `tax`.")
     urls = []
     chunks = [
         [str(x) for x in accessions[i : i + CHUNK_SIZE]]

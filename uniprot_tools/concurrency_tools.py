@@ -120,11 +120,11 @@ class TqdmParallel:
         if chunksize < 1:
             raise ValueError("Chunksize must be 1+, not {0:n}".format(chunksize))
 
-        task_batches = Pool._get_tasks(func, iterable, chunksize)  # type: ignore
+        task_batches = mpp.Pool._get_tasks(func, iterable, chunksize)  # type: ignore
         result = mpp.IMapIterator(p)
         p._taskqueue.put(  # type: ignore
             (
-                p._guarded_task_generation(result._job, starmapstar, task_batches),  # type: ignore
+                p._guarded_task_generation(result._job, mpp.starmapstar, task_batches),  # type: ignore
                 result._set_length,  # type: ignore
             )
         )

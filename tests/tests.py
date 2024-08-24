@@ -1,4 +1,4 @@
-import unittest
+import os, unittest
 
 
 def compare_files(file1, file2):
@@ -16,12 +16,48 @@ class TestConcurrency(unittest.TestCase):
 
 
 class TestFasta(unittest.TestCase):
+    def tearDown(self) -> None:
+        for file in os.listdir("tests/test_outputs"):
+            os.remove(f"tests/test_outputs/{file}")
+        return super().tearDown()
 
-    def test_read_fasta(self): ...
+    def test_read_fasta(self):
+        import contextlib, io, json
+
+        from uniprot_tools.fasta_tools import read_fasta
+
+        no_sort = read_fasta(
+            "tests/ground_truth/write_no_sort_yes_duplicates.fasta", sort_keys=False
+        )
+        yes_sort = read_fasta("tests/ground_truth/write_no_sort_yes_duplicates.fasta")
+
+        test_output = io.StringIO()
+        with contextlib.redirect_stderr(test_output):
+            yes_sort_prog = read_fasta(
+                "tests/ground_truth/write_no_sort_yes_duplicates.fasta",
+                show_progress=True,
+            )
+        self.assertRegex(
+            test_output.getvalue(),
+            r"Bytes Read: 100%\|#+\| 684/684",
+        )
+
+        with open("tests/ground_truth/read_fasta_test_no_sort.json") as f:
+            ground_truth_no_sort = json.load(f)
+        with open("tests/ground_truth/read_fasta_test_yes_sort.json") as f:
+            ground_truth_yes_sort = json.load(f)
+
+        self.assertEqual(list(no_sort.keys()), list(ground_truth_no_sort.keys()))
+        self.assertEqual(list(no_sort.values()), list(ground_truth_no_sort.values()))
+        self.assertEqual(list(yes_sort.keys()), list(ground_truth_yes_sort.keys()))
+        self.assertEqual(list(yes_sort.values()), list(ground_truth_yes_sort.values()))
+        self.assertEqual(list(yes_sort_prog.keys()), list(ground_truth_yes_sort.keys()))
+        self.assertEqual(list(yes_sort_prog.values()), list(ground_truth_yes_sort.values()))
 
     def test_write_fasta(self):
-        from uniprot_tools.fasta_tools import write_fasta
         import json
+
+        from uniprot_tools.fasta_tools import write_fasta
 
         with open("tests/test_data/test_peptides.json") as f:
             d = json.load(f)

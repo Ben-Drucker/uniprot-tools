@@ -6,7 +6,7 @@ import pandas as pd
 import tqdm
 
 
-def read_fasta(infile: str, sort_keys: bool = True) -> dict[str, str]:
+def read_fasta(infile: str, sort_keys: bool = True, show_progress: bool = False) -> dict[str, str]:
     """Read a fasta file and return a mapping from description to sequence
 
     Parameters
@@ -22,9 +22,14 @@ def read_fasta(infile: str, sort_keys: bool = True) -> dict[str, str]:
     """
     mapping = {}
     running = ""
+    line = ""
     with open(infile) as fp:
         running_description = fp.readline().strip().replace(">", "")
-        prog_bar = tqdm.tqdm(desc="Bytes Read", total=os.path.getsize(infile))
+        if show_progress:
+            prog_bar = tqdm.tqdm(desc="Bytes Read", total=os.path.getsize(infile))
+            prog_bar.update(len(running_description) + 2)
+        else:
+            prog_bar = None
         for line in fp:
             if ">" in line:
                 mapping[running_description] = running
@@ -32,7 +37,10 @@ def read_fasta(infile: str, sort_keys: bool = True) -> dict[str, str]:
                 running_description = line.strip().replace(">", "")
             else:
                 running += line.strip()
-            prog_bar.update(len(line))
+            if prog_bar:
+                prog_bar.update(len(line))
+        # if prog_bar:
+        #     prog_bar.update(len(line))
     mapping[running_description] = running
     if sort_keys:
         mapping = {k: v for k, v in sorted(mapping.items(), key=lambda item: item[0])}
@@ -80,4 +88,8 @@ def write_fasta(
     seqs, seq_descriptions = list(df["Seq"]), list(df["Description"])
     with open(outfile, "w") as fp:
         for i, seq in enumerate(seqs):
-            fp.write(f">{seq_descriptions[i]}\n{seq}\n")
+            if i + 1 == len(seqs):
+                newline = ""
+            else:
+                newline = "\n"
+            fp.write(f">{seq_descriptions[i]}\n{seq}{newline}")

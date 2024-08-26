@@ -320,13 +320,13 @@ def extract_pep_to_info(combined_df: pd.DataFrame, peptide_to_accessions: dict[s
     Parameters
     ----------
     ``combined_df`` :
-        _description_
+        TODO
     ``peptide_to_accessions`` :
-        _description_
+        TODO
 
     Returns
     -------
-        _description_
+        TODO
     """
     acc_to_is_from_vertebrate = {
         k: ("Vertebrata" in v)

@@ -1,3 +1,4 @@
+import pickle
 import multiprocessing, random, time, warnings
 from multiprocessing import cpu_count
 from multiprocessing import pool as mpp
@@ -131,14 +132,16 @@ class TqdmParallel:
         return (item for chunk in result for item in chunk)
 
 
-def request_worker(url: str, request_kwargs: dict | None = None) -> str | requests.HTTPError:
+def request_worker(
+    url: str, method: Literal["GET", "POST"] = "GET", request_kwargs: dict | None = None
+) -> str | requests.HTTPError:
     if request_kwargs is None:
         request_kwargs = {}
     if "timeout" not in request_kwargs:
         request_kwargs["timeout"] = 5
 
     def inner_main():
-        with requests.get(url, **request_kwargs) as r:
+        with requests.request(method, url, **request_kwargs) as r:
             if r.status_code == 200:
                 return r.text
             else:
@@ -162,6 +165,7 @@ def parallel_requests(
     num_concurrent: int | Literal["num_urls", "num_cores"] = "num_cores",
     request_kwargs: dict | None = None,
     prog_bar_kwargs: dict | None = None,
+    method: Literal["GET", "POST"] = "GET",
 ):
     if prog_bar_kwargs is None:
         prog_bar_kwargs = {}
@@ -180,7 +184,13 @@ def parallel_requests(
 
     return TqdmParallel.tqdm_starmap(
         request_worker,
-        [(url, request_kwargs) for url in urls],
+        [(url, method, request_kwargs) for url in urls],
         num_workers=num_concurrent,
         **prog_bar_kwargs,
     )
+
+if __name__ == "__main__":
+    urls = [f"https://camp.bicnirrh.res.in/seqDisp.php?id=CAMPSQ{i}" for i in range(1, 24815)]
+    results = parallel_requests(urls, num_concurrent=25)
+    with open("results.pkl", "wb") as f:
+        pickle.dump(results, f)

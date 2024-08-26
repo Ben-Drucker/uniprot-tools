@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+          "DTD/xhtml1-strict.dtd">
+<html>
+  
+  <head>
+    
+    <title>All Documents</title>
+    <meta name="generator" content="pydoctor 24.3.3"> 
+        
+    </meta>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1" />
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="apidocs.css" />
+    <link rel="stylesheet" type="text/css" href="extra.css" />
+</head>
+  <body>
+    
+
+    
+  
+  <div class="container-fluid">
+
+
+    <div class="navbar-header">
+      
+      <div class="navlinks">
+        <span class="navbar-brand">
+          uniprot_tools <a href="index.html">API Documentation</a>
+        </span>
+
+        <a href="moduleIndex.html">
+          Modules
+        </a>
+
+        <a href="classIndex.html">
+          Classes
+        </a>
+
+        <a href="nameIndex.html">
+          Names
+        </a>
+
+        <div id="search-box-container">
+          <div class="input-group">
+            <input id="search-box" type="search" name="search-query" placeholder="Search..." aria-label="Search" minlength="2" class="form-control" autocomplete="off" />
+            
+            <span class="input-group-btn">
+              <a style="display: none;" class="btn btn-default" id="search-clear-button" title="Clear" onclick="clearSearch()"><img src="fonts/x-circle.svg" alt="Clear" /></a>
+              <a class="btn btn-default" id="search-help-button" title="Help" onclick="toggleSearchHelpText()"><img src="fonts/info.svg" alt="Help" /></a>
+            </span>
+          </div>
+        </div>
+
+      </div>
+
+      <div id="search-results-container" style="display: none;">
+        
+        <div id="search-buttons">
+          <span class="label label-default" id="search-docstrings-button">
+          <label class="checkbox-inline">
+            <input type="checkbox" id="toggle-search-in-docstrings-checkbox" value="false" onclick="toggleSearchInDocstrings()">
+              search in docstrings
+            </input>
+          </label>
+          </span>
+          
+        </div>
+        
+        <noscript>
+            <h1>Cannot search: JavaScript is not supported/enabled in your browser.</h1>
+        </noscript>
+
+        <div class="hint" id="search-help-box">
+          <p class="rst-last">
+      
+            Search bar offers the following options:
+            <ul>   
+                <li>
+                  <strong>Term presence.</strong> The below example searches for documents that 
+                    must contain “foo”, might contain “bar” and must not contain “baz”: <code>+foo bar -baz</code>
+                </li> 
+
+                <li>
+                  <strong>Wildcards.</strong> The below example searches for documents with words beginning with “foo”: <code>foo*</code>
+                </li> 
+
+                <li>
+                  <strong>Search in specific fields.</strong> The following search matches all objects 
+                  in "twisted.mail" that matches “search”: <code>+qname:twisted.mail.* +search</code>
+
+                  <p>
+                    Possible fields: 'name', 'qname' (fully qualified name), 'docstring', and 'kind'.
+                    Last two fields are only applicable if "search in docstrings" is enabled.
+                  </p>
+                </li>
+
+                <li>
+                  <strong>Fuzzy matches.</strong> The following search matches all documents 
+                  that have a word within 1 edit distance of “foo”: <code>foo~1</code>
+                </li>
+            </ul>
+
+          </p>
+        </div>
+
+        <div id="search-status"> </div>
+
+        <div class="warning" id="search-warn-box" style="display: none;">
+          <p class="rst-last"><span id="search-warn"></span></p>
+        </div>
+
+        <table id="search-results">
+          <!-- Filled dynamically by JS -->
+        </table>
+        
+        <div style="margin-top: 8px;">
+          <p>Results provided by <a href="https://lunrjs.com">Lunr.js</a></p>
+        </div>
+      </div>
+
+    </div>
+
+
+  </div>
+
+
+    
+    
+    <div class="container">
+      <h1>All Documents</h1>
+
+       <ul>
+          <li id="uniprot_tools">
+            
+            <div class="fullName">uniprot<wbr></wbr>_tools</div>
+            <div class="url">index.html</div>
+            <div class="type">Package</div>
+            <div class="kind">Package</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="uniprot_tools.concurrency_tools">
+            
+            <div class="fullName">uniprot<wbr></wbr>_tools<wbr></wbr>.concurrency<wbr></wbr>_tools</div>
+            <div class="url">uniprot_tools.concurrency_tools.html</div>
+            <div class="type">Module</div>
+            <div class="kind">Module</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">No module docstring; 0/2 function, 1/1 class documented</span></div>
+          </li><li id="uniprot_tools.fasta_tools">
+            
+            <div class="fullName">uniprot<wbr></wbr>_tools<wbr></wbr>.fasta<wbr></wbr>_tools</div>
+            <div class="url">uniprot_tools.fasta_tools.html</div>
+            <div class="type">Module</div>
+            <div class="kind">Module</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">No module docstring; 2/2 functions documented</span></div>
+          </li><li id="uniprot_tools.get_info">
+            
+            <div class="fullName">uniprot<wbr></wbr>_tools<wbr></wbr>.get<wbr></wbr>_info</div>
+            <div class="url">uniprot_tools.get_info.html</div>
+            <div class="type">Module</div>
+            <div class="kind">Module</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">No module docstring; 1/1 function documented</span></div>
+          </li><li id="uniprot_tools.pep_search">
+            
+            <div class="fullName">uniprot<wbr></wbr>_tools<wbr></wbr>.pep<wbr></wbr>_search</div>
+            <div class="url">uniprot_tools.pep_search.html</div>
+            <div class="type">Module</div>
+            <div class="kind">Module</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">No module docstring; 0/1 variable, 6/10 functions, 0/1 class documented</span></div>
+          </li><li id="uniprot_tools.concurrency_tools.TqdmParallel">
+            
+            <div class="fullName">uniprot<wbr></wbr>_tools<wbr></wbr>.concurrency<wbr></wbr>_tools<wbr></wbr>.<wbr></wbr>Tqdm<wbr></wbr>Parallel</div>
+            <div class="url">uniprot_tools.concurrency_tools.TqdmParallel.html</div>
+            <div class="type">Class</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Class for running a function in parallel with tqdm</div>
+          </li><li id="uniprot_tools.concurrency_tools.TqdmParallel.tqdm_starmap">
+            
+            <div class="fullName">uniprot<wbr></wbr>_tools<wbr></wbr>.concurrency<wbr></wbr>_tools<wbr></wbr>.<wbr></wbr>Tqdm<wbr></wbr>Parallel<wbr></wbr>.tqdm<wbr></wbr>_starmap</div>
+            <div class="url">uniprot_tools.concurrency_tools.TqdmParallel.html#tqdm_starmap</div>
+            <div class="type">Function</div>
+            <div class="kind">Class Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Run a function in parallel with tqdm</div>
+          </li><li id="uniprot_tools.concurrency_tools.TqdmParallel._istarmap">
+            
+            <div class="fullName">uniprot<wbr></wbr>_tools<wbr></wbr>.concurrency<wbr></wbr>_tools<wbr></wbr>.<wbr></wbr>Tqdm<wbr></wbr>Parallel<wbr></wbr>._istarmap</div>
+            <div class="url">uniprot_tools.concurrency_tools.TqdmParallel.html#_istarmap</div>
+            <div class="type">Function</div>
+            <div class="kind">Class Method</div>
+            <div class="privacy">PRIVATE</div>
+            <div class="summary">Copied from from <a class="rst-external rst-reference" href="https://stackoverflow.com/a/57364423" target="_top">https://stackoverflow.com/a/57364423</a></div>
+          </li><li id="uniprot_tools.concurrency_tools.request_worker">
+            
+            <div class="fullName">uniprot<wbr></wbr>_tools<wbr></wbr>.concurrency<wbr></wbr>_tools<wbr></wbr>.request<wbr></wbr>_worker</div>
+            <div class="url">uniprot_tools.concurrency_tools.html#request_worker</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="uniprot_tools.concurrency_tools.parallel_requests">
+            
+            <div class="fullName">uniprot<wbr></wbr>_tools<wbr></wbr>.concurrency<wbr></wbr>_tools<wbr></wbr>.parallel<wbr></wbr>_requests</div>
+            <div class="url">uniprot_tools.concurrency_tools.html#parallel_requests</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="uniprot_tools.fasta_tools.read_fasta">
+            
+            <div class="fullName">uniprot<wbr></wbr>_tools<wbr></wbr>.fasta<wbr></wbr>_tools<wbr></wbr>.read<wbr></wbr>_fasta</div>
+            <div class="url">uniprot_tools.fasta_tools.html#read_fasta</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Read a fasta file and return a mapping from description to sequence</div>
+          </li><li id="uniprot_tools.fasta_tools.write_fasta">
+            
+            <div class="fullName">uniprot<wbr></wbr>_tools<wbr></wbr>.fasta<wbr></wbr>_tools<wbr></wbr>.write<wbr></wbr>_fasta</div>
+            <div class="url">uniprot_tools.fasta_tools.html#write_fasta</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Write a list of sequences to a fasta file, optionally with descriptions</div>
+          </li><li id="uniprot_tools.get_info.accession_to_prot_info">
+            
+            <div class="fullName">uniprot<wbr></wbr>_tools<wbr></wbr>.get<wbr></wbr>_info<wbr></wbr>.accession<wbr></wbr>_to<wbr></wbr>_prot<wbr></wbr>_info</div>
+            <div class="url">uniprot_tools.get_info.html#accession_to_prot_info</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Standard UniprotKB columns:</div>
+          </li><li id="uniprot_tools.pep_search._system_call">
+            
+            <div class="fullName">uniprot<wbr></wbr>_tools<wbr></wbr>.pep<wbr></wbr>_search<wbr></wbr>._system<wbr></wbr>_call</div>
+            <div class="url">uniprot_tools.pep_search.html#_system_call</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PRIVATE</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="uniprot_tools.pep_search.create_haystacks">
+            
+            <div class="fullName">uniprot<wbr></wbr>_tools<wbr></wbr>.pep<wbr></wbr>_search<wbr></wbr>.create<wbr></wbr>_haystacks</div>
+            <div class="url">uniprot_tools.pep_search.html#create_haystacks</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Break a very large fasta file into more managerable chunks for the command line search tool</div>
+          </li><li id="uniprot_tools.pep_search.create_index">
+            
+            <div class="fullName">uniprot<wbr></wbr>_tools<wbr></wbr>.pep<wbr></wbr>_search<wbr></wbr>.create<wbr></wbr>_index</div>
+            <div class="url">uniprot_tools.pep_search.html#create_index</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Create indexes that can be used with the command line search tool</div>
+          </li><li id="uniprot_tools.pep_search.CustomTQDM">
+            
+            <div class="fullName">uniprot<wbr></wbr>_tools<wbr></wbr>.pep<wbr></wbr>_search<wbr></wbr>.<wbr></wbr>Custom<wbr></wbr>TQDM</div>
+            <div class="url">uniprot_tools.pep_search.CustomTQDM.html</div>
+            <div class="type">Class</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="uniprot_tools.pep_search.CustomTQDM.__init__">
+            
+            <div class="fullName">uniprot<wbr></wbr>_tools<wbr></wbr>.pep<wbr></wbr>_search<wbr></wbr>.<wbr></wbr>Custom<wbr></wbr>TQDM<wbr></wbr>.__init__</div>
+            <div class="url">uniprot_tools.pep_search.CustomTQDM.html#__init__</div>
+            <div class="type">Function</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="uniprot_tools.pep_search.CustomTQDM.desc">
+            
+            <div class="fullName">uniprot<wbr></wbr>_tools<wbr></wbr>.pep<wbr></wbr>_search<wbr></wbr>.<wbr></wbr>Custom<wbr></wbr>TQDM<wbr></wbr>.desc</div>
+            <div class="url">uniprot_tools.pep_search.CustomTQDM.html#desc</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Instance Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="uniprot_tools.pep_search.CustomTQDM.smoothing">
+            
+            <div class="fullName">uniprot<wbr></wbr>_tools<wbr></wbr>.pep<wbr></wbr>_search<wbr></wbr>.<wbr></wbr>Custom<wbr></wbr>TQDM<wbr></wbr>.smoothing</div>
+            <div class="url">uniprot_tools.pep_search.CustomTQDM.html#smoothing</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Instance Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="uniprot_tools.pep_search.post_process_java_output">
+            
+            <div class="fullName">uniprot<wbr></wbr>_tools<wbr></wbr>.pep<wbr></wbr>_search<wbr></wbr>.post<wbr></wbr>_process<wbr></wbr>_java<wbr></wbr>_output</div>
+            <div class="url">uniprot_tools.pep_search.html#post_process_java_output</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Based on outputs to java command line peptide search tool, produce a mapping from peptides         to sets of proteins</div>
+          </li><li id="uniprot_tools.pep_search._post_process_java_output_worker">
+            
+            <div class="fullName">uniprot<wbr></wbr>_tools<wbr></wbr>.pep<wbr></wbr>_search<wbr></wbr>._post<wbr></wbr>_process<wbr></wbr>_java<wbr></wbr>_output<wbr></wbr>_worker</div>
+            <div class="url">uniprot_tools.pep_search.html#_post_process_java_output_worker</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PRIVATE</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="uniprot_tools.pep_search.pep_search">
+            
+            <div class="fullName">uniprot<wbr></wbr>_tools<wbr></wbr>.pep<wbr></wbr>_search<wbr></wbr>.pep<wbr></wbr>_search</div>
+            <div class="url">uniprot_tools.pep_search.html#pep_search</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Searches for matching proteins form given peptides in a given index</div>
+          </li><li id="uniprot_tools.pep_search.tqdm_gather_with_concurrency">
+            
+            <div class="fullName">uniprot<wbr></wbr>_tools<wbr></wbr>.pep<wbr></wbr>_search<wbr></wbr>.tqdm<wbr></wbr>_gather<wbr></wbr>_with<wbr></wbr>_concurrency</div>
+            <div class="url">uniprot_tools.pep_search.html#tqdm_gather_with_concurrency</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="uniprot_tools.pep_search.get_verts">
+            
+            <div class="fullName">uniprot<wbr></wbr>_tools<wbr></wbr>.pep<wbr></wbr>_search<wbr></wbr>.get<wbr></wbr>_verts</div>
+            <div class="url">uniprot_tools.pep_search.html#get_verts</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="uniprot_tools.pep_search.existence_codes">
+            
+            <div class="fullName">uniprot<wbr></wbr>_tools<wbr></wbr>.pep<wbr></wbr>_search<wbr></wbr>.existence<wbr></wbr>_codes</div>
+            <div class="url">uniprot_tools.pep_search.html#existence_codes</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="uniprot_tools.pep_search.process_tsvs">
+            
+            <div class="fullName">uniprot<wbr></wbr>_tools<wbr></wbr>.pep<wbr></wbr>_search<wbr></wbr>.process<wbr></wbr>_tsvs</div>
+            <div class="url">uniprot_tools.pep_search.html#process_tsvs</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Turn Uniprot text tsvs into one, combined pandas <code>DataFrame</code></div>
+          </li><li id="uniprot_tools.pep_search.extract_pep_to_info">
+            
+            <div class="fullName">uniprot<wbr></wbr>_tools<wbr></wbr>.pep<wbr></wbr>_search<wbr></wbr>.extract<wbr></wbr>_pep<wbr></wbr>_to<wbr></wbr>_info</div>
+            <div class="url">uniprot_tools.pep_search.html#extract_pep_to_info</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">TODO</div>
+          </li>
+       </ul>
+    </div>
+  </body>
+</html>

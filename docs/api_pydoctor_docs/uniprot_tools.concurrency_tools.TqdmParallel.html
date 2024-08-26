@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+          "DTD/xhtml1-strict.dtd">
+<html>
+  
+
+  <head>
+    
+    <title>uniprot_tools.concurrency_tools.TqdmParallel</title>
+    <meta name="generator" content="pydoctor 24.3.3"> 
+        
+    </meta>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1" />
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="apidocs.css" />
+    <link rel="stylesheet" type="text/css" href="extra.css" />
+</head>
+
+  <body>
+
+    
+
+    <nav class="navbar navbar-default mainnavbar">
+      
+  
+  <div class="container-fluid">
+
+
+    <div class="navbar-header">
+      
+      <div class="navlinks">
+        <span class="navbar-brand">
+          uniprot_tools <a href="index.html">API Documentation</a>
+        </span>
+
+        <a href="moduleIndex.html">
+          Modules
+        </a>
+
+        <a href="classIndex.html">
+          Classes
+        </a>
+
+        <a href="nameIndex.html">
+          Names
+        </a>
+
+        <div id="search-box-container">
+          <div class="input-group">
+            <input id="search-box" type="search" name="search-query" placeholder="Search..." aria-label="Search" minlength="2" class="form-control" autocomplete="off" />
+            
+            <span class="input-group-btn">
+              <a style="display: none;" class="btn btn-default" id="search-clear-button" title="Clear" onclick="clearSearch()"><img src="fonts/x-circle.svg" alt="Clear" /></a>
+              <a class="btn btn-default" id="search-help-button" title="Help" onclick="toggleSearchHelpText()"><img src="fonts/info.svg" alt="Help" /></a>
+            </span>
+          </div>
+        </div>
+
+      </div>
+
+      <div id="search-results-container" style="display: none;">
+        
+        <div id="search-buttons">
+          <span class="label label-default" id="search-docstrings-button">
+          <label class="checkbox-inline">
+            <input type="checkbox" id="toggle-search-in-docstrings-checkbox" value="false" onclick="toggleSearchInDocstrings()">
+              search in docstrings
+            </input>
+          </label>
+          </span>
+          
+        </div>
+        
+        <noscript>
+            <h1>Cannot search: JavaScript is not supported/enabled in your browser.</h1>
+        </noscript>
+
+        <div class="hint" id="search-help-box">
+          <p class="rst-last">
+      
+            Search bar offers the following options:
+            <ul>   
+                <li>
+                  <strong>Term presence.</strong> The below example searches for documents that 
+                    must contain “foo”, might contain “bar” and must not contain “baz”: <code>+foo bar -baz</code>
+                </li> 
+
+                <li>
+                  <strong>Wildcards.</strong> The below example searches for documents with words beginning with “foo”: <code>foo*</code>
+                </li> 
+
+                <li>
+                  <strong>Search in specific fields.</strong> The following search matches all objects 
+                  in "twisted.mail" that matches “search”: <code>+qname:twisted.mail.* +search</code>
+
+                  <p>
+                    Possible fields: 'name', 'qname' (fully qualified name), 'docstring', and 'kind'.
+                    Last two fields are only applicable if "search in docstrings" is enabled.
+                  </p>
+                </li>
+
+                <li>
+                  <strong>Fuzzy matches.</strong> The following search matches all documents 
+                  that have a word within 1 edit distance of “foo”: <code>foo~1</code>
+                </li>
+            </ul>
+
+          </p>
+        </div>
+
+        <div id="search-status"> </div>
+
+        <div class="warning" id="search-warn-box" style="display: none;">
+          <p class="rst-last"><span id="search-warn"></span></p>
+        </div>
+
+        <table id="search-results">
+          <!-- Filled dynamically by JS -->
+        </table>
+        
+        <div style="margin-top: 8px;">
+          <p>Results provided by <a href="https://lunrjs.com">Lunr.js</a></p>
+        </div>
+      </div>
+
+    </div>
+
+
+  </div>
+</nav>
+    
+    <div class="container-fluid">
+
+      <!-- Side navigation -->
+      <div class="sidebarcontainer" style="display: none;">
+        
+        <div class="sidebar"><nav class="sidebar">
+  
+
+  <div>
+
+      <div class="thingTitle">
+        <span>Class</span>
+        <code class="thisobject"><a href="uniprot_tools.concurrency_tools.TqdmParallel.html" class="internal-link" title="This class"><wbr></wbr>Tqdm<wbr></wbr>Parallel</a></code> 
+      </div>
+      
+      <div>
+        
+
+        
+         
+
+        
+        
+
+        <div class="childrenKindTitle">Methods</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#tqdm_starmap" class="internal-link" title="uniprot_tools.concurrency_tools.TqdmParallel.tqdm_starmap">tqdm<wbr></wbr>_starmap</a></code>
+            </div>
+        
+
+    </li><li class="private">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#_istarmap" class="internal-link" title="uniprot_tools.concurrency_tools.TqdmParallel._istarmap">_istarmap</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
+
+        
+         
+
+        
+         
+
+        
+         
+        
+      </div>
+  </div><div>
+
+      <div class="thingTitle">
+        <span>Module</span>
+        <code><a href="uniprot_tools.concurrency_tools.html" class="internal-link" title="The parent of this class">concurrency<wbr></wbr>_tools</a></code> 
+      </div>
+      
+      <div>
+        
+
+        
+         
+
+        <div class="childrenKindTitle">Classes</div>
+        <ul>
+    
+    <li class=" thisobject">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="uniprot_tools.concurrency_tools.TqdmParallel.html" class="internal-link" title="uniprot_tools.concurrency_tools.TqdmParallel"><wbr></wbr>Tqdm<wbr></wbr>Parallel</a></code>
+            </div>
+        
+
+    </li>
+</ul>
+
+        <div class="childrenKindTitle">Functions</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="uniprot_tools.concurrency_tools.html#parallel_requests" class="internal-link" title="uniprot_tools.concurrency_tools.parallel_requests">parallel<wbr></wbr>_requests</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="uniprot_tools.concurrency_tools.html#request_worker" class="internal-link" title="uniprot_tools.concurrency_tools.request_worker">request<wbr></wbr>_worker</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
+
+        
+         
+
+        
+         
+
+        
+         
+        
+      </div>
+  </div>
+
+</nav>
+        </div>
+        <div id="collapseSideBar">
+          <a class="btn btn-link" onclick="toggleSideBarCollapse()" title="Toggle Sidebar Collapse">
+          </a>
+        </div> 
+        <script src="sidebartoggle.js" type="text/javascript"></script>
+       
+      </div>
+
+      <div id="main" class="">
+        
+
+        
+
+        <div class="page-header">
+          <h1 class="class"><code><code><a href="index.html" class="internal-link">uniprot_tools</a></code><wbr></wbr>.<code><a href="uniprot_tools.concurrency_tools.html" class="internal-link" title="uniprot_tools.concurrency_tools">concurrency_tools</a></code><wbr></wbr>.<code><a href="uniprot_tools.concurrency_tools.TqdmParallel.html" class="internal-link" title="uniprot_tools.concurrency_tools.TqdmParallel">TqdmParallel</a></code></code></h1>
+          <div id="showPrivate">
+            <button class="btn btn-link" onclick="togglePrivate()">Toggle Private API</button>
+          </div>
+        </div>
+
+        <div class="categoryHeader">
+          class documentation
+        </div>
+
+        <div class="extrasDocstring">
+          <p class="class-signature"><code><span class="py-keyword">class</span> <span class="py-defname">TqdmParallel</span>:</code></p>
+          <p><a href="classIndex.html#uniprot_tools.concurrency_tools.TqdmParallel">View In Hierarchy</a></p>
+        </div>
+
+        <div class="moduleDocstring">
+          <div><p>Class for running a function in parallel with tqdm</p></div>
+        </div>
+
+        <div id="splitTables">
+          <table class="children sortable" id="id3">
+  
+  
+  <tr class="classmethod">
+    
+    <td>Class Method</td>
+    <td><code><a href="#tqdm_starmap" class="internal-link" title="uniprot_tools.concurrency_tools.TqdmParallel.tqdm_starmap">tqdm<wbr></wbr>_starmap</a></code></td>
+    <td>Run a function in parallel with tqdm</td>
+  </tr><tr class="classmethod private">
+    
+    <td>Class Method</td>
+    <td><code><a href="#_istarmap" class="internal-link" title="uniprot_tools.concurrency_tools.TqdmParallel._istarmap">_istarmap</a></code></td>
+    <td>Copied from from <a class="rst-external rst-reference" href="https://stackoverflow.com/a/57364423" target="_top">https://stackoverflow.com/a/57364423</a></td>
+  </tr>
+</table>
+          
+
+            
+        </div>
+
+        <div id="childList">
+          <div class="baseclassmethod">
+  
+  
+  <a name="uniprot_tools.concurrency_tools.TqdmParallel.tqdm_starmap">
+    
+  </a>
+  <a name="tqdm_starmap">
+    
+  </a>
+  <div class="functionHeader">
+    
+    @<a href="https://docs.python.org/3/library/functions.html#classmethod" class="intersphinx-link">classmethod</a><br />
+    <span class="py-keyword">def</span> <span class="py-defname">tqdm_starmap</span><span class="function-signature">(cls, worker_fn: <code><a href="https://docs.python.org/3/library/typing.html#typing.Callable" class="intersphinx-link">Callable</a></code>, worker_args: <code><a href="https://docs.python.org/3/library/stdtypes.html#list" class="intersphinx-link">list</a>[<wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#tuple" class="intersphinx-link">tuple</a>]</code>, num_workers=<a href="https://docs.python.org/3/library/multiprocessing.html#multiprocessing.cpu_count" class="intersphinx-link">cpu_count</a>() - 1, cleanup_fn=lambda: None, processes_or_threads: <code><a href="https://docs.python.org/3/library/typing.html#typing.Literal" class="intersphinx-link">Literal</a>[<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">processes</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">threads</span><span class="rst-variable-quote">'</span>]</code> = <span class="rst-variable-quote">'</span><span class="rst-variable-string">processes</span><span class="rst-variable-quote">'</span>, tqdm_class=tqdm.tqdm, **tqdm_kwargs)</span>:
+    
+    <a class="headerLink" href="#tqdm_starmap" title="uniprot_tools.concurrency_tools.TqdmParallel.tqdm_starmap">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Run a function in parallel with tqdm</p><table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">worker<wbr></wbr>_fn:</span><code><a href="https://docs.python.org/3/library/typing.html#typing.Callable" class="intersphinx-link">Callable</a></code></td><td class="fieldArgDesc">The function to run in parallel</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">worker<wbr></wbr>_args:</span><code><a href="https://docs.python.org/3/library/stdtypes.html#list" class="intersphinx-link">list</a>[<wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#tuple" class="intersphinx-link">tuple</a>]</code></td><td class="fieldArgDesc">List of tuples of arguments to pass to the function. Each tuple is passed to the                 <tt class="rst-docutils rst-literal">worker_fn</tt>'s <tt class="rst-docutils rst-literal">*args</tt>.</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">num<wbr></wbr>_workers</span></td><td class="fieldArgDesc">The number of workers to use. Defaults to the number of cores - 1.</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">cleanup<wbr></wbr>_fn</span></td><td class="fieldArgDesc">The function to call when the workers are finished. Defaults to a no-op function.</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">processes<wbr></wbr>_or<wbr></wbr>_threads:</span><code><a href="https://docs.python.org/3/library/typing.html#typing.Literal" class="intersphinx-link">Literal</a>[<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">processes</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">threads</span><span class="rst-variable-quote">'</span>]</code></td><td class="fieldArgDesc">Whether to use multiprocessing or threading. Defaults to multiprocessing.</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">tqdm<wbr></wbr>_class</span></td><td class="fieldArgDesc">The tqdm class to use. Defaults to <tt class="rst-docutils rst-literal">tqdm.tqdm</tt>, but could also be, for example,                 <tt class="rst-docutils rst-literal">tqdm.tqdm_notebook</tt>.</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">**tqdm<wbr></wbr>_kwargs</span></td><td class="fieldArgDesc"><p>Additional keyword arguments to pass to the tqdm class. Some possible options include:</p>
+<pre class="rst-literal-block">
+desc=
+leave=
+ncols=
+ascii=
+disable=
+unit=
+unit_scale=
+dynamic_ncols=
+smoothing=
+position=
+</pre>
+</td></tr></table></div>
+  </div>
+</div><div class="baseclassmethod private">
+  
+  
+  <a name="uniprot_tools.concurrency_tools.TqdmParallel._istarmap">
+    
+  </a>
+  <a name="_istarmap">
+    
+  </a>
+  <div class="functionHeader">
+    
+    @<a href="https://docs.python.org/3/library/functions.html#classmethod" class="intersphinx-link">classmethod</a><br />
+    <span class="py-keyword">def</span> <span class="py-defname">_istarmap</span><span class="function-signature">(cls, p: <code><a href="https://docs.python.org/3/library/multiprocessing.html#multiprocessing.pool.Pool" class="intersphinx-link">mpp.Pool</a> | <a href="https://docs.python.org/3/library/multiprocessing.html#multiprocessing.pool.ThreadPool" class="intersphinx-link">mpp.ThreadPool</a></code>, func: <code><a href="https://docs.python.org/3/library/typing.html#typing.Callable" class="intersphinx-link">Callable</a></code>, iterable: <code><a href="https://docs.python.org/3/library/typing.html#typing.Iterable" class="intersphinx-link">Iterable</a></code>, chunksize=1)</span>:
+    
+    <a class="headerLink" href="#_istarmap" title="uniprot_tools.concurrency_tools.TqdmParallel._istarmap">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p><div class="rst-admonition rst-admonition-notes">
+<p class="rst-admonition-title rst-first">Notes</p>
+<p class="rst-last">Copied from from <a class="rst-external rst-reference" href="https://stackoverflow.com/a/57364423" target="_top">https://stackoverflow.com/a/57364423</a></p>
+</div>
+</p></div>
+  </div>
+</div>
+        </div>
+      
+      </div>
+    </div>
+
+    <footer class="navbar navbar-default">
+    <hr />
+    
+    
+    <div class="container">
+      <a href="index.html">API Documentation</a> for uniprot_tools, generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>.
+    </div>
+    
+    <script src="ajax.js" type="text/javascript"></script>
+    <script src="searchlib.js" type="text/javascript"></script>
+    <script src="search.js" type="text/javascript"></script>
+  
+  </footer>
+  
+    <script src="pydoctor.js" type="text/javascript"></script>
+
+  </body>
+</html>

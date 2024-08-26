@@ -30,7 +30,7 @@ def accession_to_prot_info(
 
     Raises
     ------
-        ``ValueError`` :
+        `ValueError` :
             If ``knowledge_base`` is not one of ``uniprotkb`` or ``uniparc`` or ``taxonomy``
 
     Notes

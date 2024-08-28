@@ -1,6 +1,12 @@
+import gzip
+import shutil
 import contextlib, io, json, os, unittest
 
+from httpx import request
+import numpy as np
 import pandas as pd
+import requests
+import tqdm
 
 
 def compare_files(file1, file2):
@@ -105,11 +111,66 @@ class TestPepSearch(unittest.TestCase):
             process_tsvs,
         )
 
+        self._get_test_fasta()
+
         return super().setUp()
 
-    def test_pep_search(self): ...
+    # def tearDown(self) -> None:
+    #     for file in os.listdir("tests/test_outputs"):
+    #         os.remove(f"tests/test_outputs/{file}")
 
-    def test_create_haystacks(self): ...
+    #     return super().tearDown()
+
+    def _get_test_fasta(self):
+        url = (
+            "https://ftp.uniprot.org/pub/databases/uniprot"
+            "/current_release/knowledgebase/complete/uniprot_sprot"
+            ".fasta.gz"
+        )
+
+        with requests.get(url, stream=True) as r:
+            r.raise_for_status()
+            with open("tests/test_data/test_uniprot_sprot.fasta.gz", "wb") as f:
+                for chunk in tqdm.tqdm(
+                    r.iter_content(chunk_size=2**20),
+                    total=int(np.ceil(int(r.headers["Content-Length"]) / 2**20)),
+                    desc="Downloading test data from Uniprot.",
+                    unit="MB",
+                ):
+                    f.write(chunk)
+
+        with open("tests/test_data/test_uniprot_sprot-plaintext.fasta", "wt") as plain_f:
+            with gzip.open("tests/test_data/test_uniprot_sprot.fasta.gz", "rt") as gzip_f:
+                plain_f.write(gzip_f.read())
+
+        os.remove("tests/test_data/test_uniprot_sprot.fasta.gz")
+
+    def test_create_haystacks(self):
+        from uniprot_tools.pep_search import create_haystacks
+
+        test_fasta = "tests/test_data/test_uniprot_sprot-plaintext.fasta"
+        with open(test_fasta) as f:
+            num_lines = sum(1 for _ in f)
+
+        haystack_dir = "tests/test_outputs/haystacks"
+        if os.path.exists(haystack_dir):
+            shutil.rmtree(haystack_dir)
+        os.mkdir(haystack_dir)
+        create_haystacks([test_fasta], haystack_dir, num_lines=[num_lines], seqs_per_chunk=int(1e5))
+
+        total_haystacks_size = sum(
+            [os.path.getsize(f"{haystack_dir}/{x}") for x in os.listdir(haystack_dir)]
+        )
+        num_haystacks_files = [x for x in os.listdir(haystack_dir) if x.endswith(".fasta")]
+
+        self.assertTrue(  # account for variations in size as uniprot updates
+            250 * 1e6 < total_haystacks_size < 350 * 1e6,
+            f"total_haystacks_size was {total_haystacks_size / 1e6:.2f} MB",
+        )
+        self.assertTrue(5 < len(num_haystacks_files) < 8)
+        os.remove("tests/test_data/test_uniprot_sprot-plaintext.fasta")
+
+    def test_pep_search(self): ...
 
     def test_create_index(self): ...
 

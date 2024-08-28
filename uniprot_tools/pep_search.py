@@ -87,7 +87,7 @@ def create_index(
 
     commands = sorted(
         [
-            f"java -jar /Applications/PeptideMatchCMD_1.1.jar -a index -d '{h}' -i"
+            f"java -jar {__file__}/../PeptideMatchCMD_1.1.jar -a index -d '{h}' -i"
             f" '{index_dir}/{os.path.basename(i)}'"
             for h, i in zip(fasta_files, output_indexes_dir_names)
         ]
@@ -206,7 +206,7 @@ def pep_search(
 
     commands = sorted(
         [
-            f"java -jar /Applications/PeptideMatchCMD_1.1.jar -a query -Q {inputs} -i"
+            f"java -jar {__file__}/../PeptideMatchCMD_1.1.jar -a query -Q {inputs} -i"
             f" '{i}' -o {o} -l"
             for i, o in zip(indexes, output_results_names)
         ]
@@ -217,7 +217,7 @@ def pep_search(
 
     if delete_index_when_done:
         for i in indexes:
-            shutil.rmtree(i)
+            shutil.rmtree(i) 
 
 async def tqdm_gather_with_concurrency(*coroutines, max_concurrency=4, **tqdm_kwargs):
     semaphore = asyncio.Semaphore(max_concurrency)

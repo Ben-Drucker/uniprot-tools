@@ -1,7 +1,7 @@
 import pickle
-import multiprocessing, random, time, warnings
+import random, time, warnings
 from multiprocessing import cpu_count
-from multiprocessing import pool as mpp
+from multiprocess import pool as mpp
 from typing import Callable, Iterable, Literal
 
 import requests, tqdm
@@ -176,7 +176,7 @@ def parallel_requests(
         case "num_urls":
             num_concurrent = len(urls)
         case "num_cores":
-            num_concurrent = multiprocessing.cpu_count()
+            num_concurrent = cpu_count()
         case _:
             assert isinstance(
                 num_concurrent, int
@@ -189,8 +189,10 @@ def parallel_requests(
         **prog_bar_kwargs,
     )
 
+
 if __name__ == "__main__":
-    urls = [f"https://camp.bicnirrh.res.in/seqDisp.php?id=CAMPSQ{i}" for i in range(1, 24815)]
-    results = parallel_requests(urls, num_concurrent=25)
-    with open("results.pkl", "wb") as f:
-        pickle.dump(results, f)
+    # urls = [f"https://camp.bicnirrh.res.in/seqDisp.php?id=CAMPSQ{i}" for i in range(1, 24815)]
+    # results = parallel_requests(urls, num_concurrent=25)
+    # with open("results.pkl", "wb") as f:
+    #     pickle.dump(results, f)
+    results = pickle.load(open("results.pkl", "rb"))

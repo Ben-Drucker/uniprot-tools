@@ -1,11 +1,9 @@
-import os
-import shutil
-from setuptools import setup, find_packages
-import requests
-
-
 # Check java is installed
-import subprocess
+import os, shutil, subprocess
+
+import requests
+from setuptools import find_packages, setup
+
 try:
     subprocess.check_output("java -version", shell=True)
 except subprocess.CalledProcessError:

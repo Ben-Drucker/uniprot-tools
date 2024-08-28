@@ -1,12 +1,10 @@
-import gzip
-import shutil
-import contextlib, io, json, os, unittest
+import contextlib, gzip, io, json, os, shutil, unittest
 
-from httpx import request
 import numpy as np
 import pandas as pd
 import requests
 import tqdm
+from httpx import request
 
 
 def compare_files(file1, file2):
@@ -128,7 +126,7 @@ class TestPepSearch(unittest.TestCase):
             ".fasta.gz"
         )
 
-        with requests.get(url, stream=True) as r:
+        with requests.get(url, stream=True, timeout=120) as r:
             r.raise_for_status()
             with open("tests/test_data/test_uniprot_sprot.fasta.gz", "wb") as f:
                 for chunk in tqdm.tqdm(

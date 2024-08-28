@@ -42,7 +42,7 @@ def create_haystacks(
     ``haystack_str`` :
         Additional string to be added to the haystack file name
     """
-    
+
     if num_lines is None:
         num_lines = [0] * len(fasta_files)
     for fasta_file, num_lines_i in zip(fasta_files, num_lines):
@@ -70,7 +70,9 @@ def create_haystacks(
 
 
 def create_index(
-    fasta_files: list[str], index_dir: str, num_search_procs: int = multiprocessing.cpu_count(),
+    fasta_files: list[str],
+    index_dir: str,
+    num_search_procs: int = multiprocessing.cpu_count(),
 ) -> None:
     """Create indexes that can be used with the command line search tool
 
@@ -217,7 +219,8 @@ def pep_search(
 
     if delete_index_when_done:
         for i in indexes:
-            shutil.rmtree(i) 
+            shutil.rmtree(i)
+
 
 async def tqdm_gather_with_concurrency(*coroutines, max_concurrency=4, **tqdm_kwargs):
     semaphore = asyncio.Semaphore(max_concurrency)

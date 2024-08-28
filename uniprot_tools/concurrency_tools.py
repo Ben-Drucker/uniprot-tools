@@ -1,10 +1,9 @@
-import pickle
-import random, time, warnings
+import pickle, random, time, warnings
 from multiprocessing import cpu_count
-from multiprocess import pool as mpp
 from typing import Callable, Iterable, Literal
 
 import requests, tqdm
+from multiprocess import pool as mpp
 
 
 class TqdmParallel:

@@ -265,12 +265,6 @@ async def get_verts(peptide_to_accessions: dict[str, set[str]], on_chunk=0, out_
         url = f"https://rest.uniprot.org/uniprotkb/search?{fields_str}&{query_str}&{fmt}&size={len(chunk)}"
         urls.append(url)
 
-    async def fetch(url, session: aiohttp.ClientSession, i):
-        async with session.get(url, ssl=sslcontext, timeout=len(urls) * 3) as response:
-            if response.status != 200:
-                return (url, HTTPError(await response.text()))
-            return await response.text()
-
     async def main(urls):
         async with aiohttp.ClientSession() as session:
             tasks = []

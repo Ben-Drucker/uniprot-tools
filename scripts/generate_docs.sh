@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 cd uniprot_tools
 rm -rf ../docs/api_pydoctor_docs/
 mkdir -p ../docs/api_pydoctor_docs

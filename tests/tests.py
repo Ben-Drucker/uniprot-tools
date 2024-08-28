@@ -4,7 +4,6 @@ import numpy as np
 import pandas as pd
 import requests
 import tqdm
-from httpx import request
 
 
 def compare_files(file1, file2):
@@ -14,8 +13,6 @@ def compare_files(file1, file2):
 
 class TestConcurrency(unittest.TestCase):
     def setUp(self) -> None:
-        from uniprot_tools.concurrency_tools import TqdmParallel
-
         return super().setUp()
 
     def test_tqdm_parallel(self): ...
@@ -59,8 +56,6 @@ class TestFasta(unittest.TestCase):
         self.assertEqual(list(yes_sort_prog.values()), list(ground_truth_yes_sort.values()))
 
     def test_write_fasta(self):
-        import json
-
         from uniprot_tools.fasta_tools import write_fasta
 
         with open("tests/test_data/test_peptides.json") as f:

@@ -18,5 +18,4 @@ license = { file = "LICENSE" }
 keywords = ["uniprot", "tools", "parallel", "api"]
 
 [tool.coverage.run]
-omit = [".vscode/*", "tests/*", "venv/*", "setup.py"]
-
+omit = [".vscode/*", "venv/*", "setup.py"] #, "tests/*"]

@@ -1,23 +1,40 @@
-import asyncio, collections, io, multiprocessing, os, re, shutil, ssl, subprocess
+import asyncio, collections, io, itertools, multiprocessing, os, re, shutil, subprocess, sys
 from multiprocessing.pool import ThreadPool
-from shlex import quote, split
+from shlex import split
+from textwrap import wrap
 
-import aiohttp
-import certifi
 import pandas as pd
 import tqdm
-from requests import HTTPError
+from termcolor import colored
 from tqdm.asyncio import tqdm_asyncio
 
+from uniprot_tools import this_dir
 
-def _system_call(command):
-    cmds_sanitized = quote(command)
-    cmds = split(cmds_sanitized)
+
+def _system_call(command: str):
+    cmds = split(command)
     if not re.search("java -jar.*PeptideMatchCMD", command):
         raise ValueError(f"Invalid command: {command}")
-    end_code = subprocess.run(cmds).returncode
+    with open(os.devnull, "w") as devnull:
+        proc = subprocess.run(cmds, stderr=subprocess.PIPE, stdout=devnull)
+    error_text = proc.stderr.decode("utf-8")
+    end_code = proc.returncode
     if end_code != 0:
-        raise ValueError(f"Command failed with code {end_code}: {command}")
+        err_block = "\n".join(
+            wrap(
+                f"« {error_text.strip()} »",
+                width=80,
+                initial_indent=" " * 4,
+                subsequent_indent=" " * 8,
+            )
+        )
+        command = f"` {command} `"
+        raise ValueError(
+            f"\nThe following command failed with code {end_code}:\n"
+            f"    {colored(command, 'blue')}\n"
+            "The command gave the error message:\n"
+            f"{colored(err_block, 'red', attrs=['bold'])}"
+        )
 
 
 def create_haystacks(
@@ -89,8 +106,8 @@ def create_index(
 
     commands = sorted(
         [
-            f"java -jar {__file__}/../PeptideMatchCMD_1.1.jar -a index -d '{h}' -i"
-            f" '{index_dir}/{os.path.basename(i)}'"
+            f"java -jar '{this_dir.this_dir('')}bin/PeptideMatchCMD_1.1.jar' -f -a index -d '{h}'"
+            f" -i '{index_dir}/{os.path.basename(i)}'"
             for h, i in zip(fasta_files, output_indexes_dir_names)
         ]
     )
@@ -191,7 +208,6 @@ def pep_search(
         for x in sorted(os.listdir(index_dir))
         if not re.search(r"^\.", x) and not re.search(r"tmp", x)
     ]
-    print(indexes)
     if (
         os.path.exists(intermediate_dir)
         and len([x for x in os.listdir(intermediate_dir) if re.search(r"^\.", x)]) > 0
@@ -208,8 +224,8 @@ def pep_search(
 
     commands = sorted(
         [
-            f"java -jar {__file__}/../PeptideMatchCMD_1.1.jar -a query -Q {inputs} -i"
-            f" '{i}' -o {o} -l"
+            f"java -jar '{this_dir.this_dir('')}bin/PeptideMatchCMD_1.1.jar' -f -a query -Q"
+            f" {inputs} -i '{i}' -o {o} -l"
             for i, o in zip(indexes, output_results_names)
         ]
     )
@@ -220,64 +236,6 @@ def pep_search(
     if delete_index_when_done:
         for i in indexes:
             shutil.rmtree(i)
-
-
-async def tqdm_gather_with_concurrency(*coroutines, max_concurrency=4, **tqdm_kwargs):
-    semaphore = asyncio.Semaphore(max_concurrency)
-
-    async def semaphore_coroutine(coroutine):
-        async with semaphore:
-            return await coroutine
-
-    return await tqdm_asyncio.gather(*(semaphore_coroutine(c) for c in coroutines), **tqdm_kwargs)
-
-
-async def get_verts(peptide_to_accessions: dict[str, set[str]], on_chunk=0, out_of=0):
-    CHUNK_SIZE = 500
-    sslcontext = ssl.create_default_context(cafile=certifi.where())
-
-    accessions = set()
-    for v in peptide_to_accessions.values():
-        accessions.update(v)
-
-    accessions = sorted(accessions)
-
-    urls = []
-    fields = [
-        "accession",
-        "reviewed",
-        "protein_name",
-        "organism_name",
-        "cc_alternative_products",
-        "protein_existence",
-        "lineage",
-        "virus_hosts",
-    ]
-
-    for chunk in tqdm.tqdm(
-        [accessions[i : i + CHUNK_SIZE] for i in range(0, len(accessions), CHUNK_SIZE)],
-        desc="Generating URLs",
-    ):
-        chunk = [x for x in chunk if str(x) != "nan"]
-        query_str = "query=" + "(accession:" + f")+OR+(accession:".join(chunk) + ")"
-        fields_str = "fields=" + ",".join(fields)
-        fmt = "format=tsv"
-        url = f"https://rest.uniprot.org/uniprotkb/search?{fields_str}&{query_str}&{fmt}&size={len(chunk)}"
-        urls.append(url)
-
-    async def main(urls):
-        async with aiohttp.ClientSession() as session:
-            tasks = []
-            for i, url in enumerate(urls):
-                task = fetch(url, session, i)
-                tasks.append(task)
-
-            responses = await tqdm_asyncio.gather(
-                *tasks, desc=f"Uniprot Query Progress Chunk [{on_chunk}/{out_of}]"
-            )
-            return responses
-
-    return await main(urls)
 
 
 existence_codes = {

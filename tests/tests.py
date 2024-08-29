@@ -20,8 +20,8 @@ class TestConcurrency(unittest.TestCase):
 
 class TestFasta(unittest.TestCase):
     def tearDown(self) -> None:
-        for file in os.listdir("tests/test_outputs"):
-            os.remove(f"tests/test_outputs/{file}")
+        # for file in os.listdir("tests/test_outputs"):
+        #     os.remove(f"tests/test_outputs/{file}")
         return super().tearDown()
 
     def test_read_fasta(self):
@@ -138,7 +138,7 @@ class TestPepSearch(unittest.TestCase):
 
         os.remove("tests/test_data/test_uniprot_sprot.fasta.gz")
 
-    def test_create_haystacks(self):
+    def _wrapper_create_haystacks(self):
         from uniprot_tools.pep_search import create_haystacks
 
         test_fasta = "tests/test_data/test_uniprot_sprot-plaintext.fasta"
@@ -148,7 +148,7 @@ class TestPepSearch(unittest.TestCase):
         haystack_dir = "tests/test_outputs/haystacks"
         if os.path.exists(haystack_dir):
             shutil.rmtree(haystack_dir)
-        os.mkdir(haystack_dir)
+        os.makedirs(haystack_dir, exist_ok=True)
         create_haystacks([test_fasta], haystack_dir, num_lines=[num_lines], seqs_per_chunk=int(1e5))
 
         total_haystacks_size = sum(
@@ -161,13 +161,57 @@ class TestPepSearch(unittest.TestCase):
             f"total_haystacks_size was {total_haystacks_size / 1e6:.2f} MB",
         )
         self.assertTrue(5 < len(num_haystacks_files) < 8)
+
         os.remove("tests/test_data/test_uniprot_sprot-plaintext.fasta")
 
-    def test_pep_search(self): ...
+    # @unittest.skip(
+    #     "Skipping `test_create_index` as it's run automatically by `test_post_process_java_output`"
+    # )
+    def _wrapper_create_index(self):
+        from uniprot_tools.pep_search import create_index
 
-    def test_create_index(self): ...
+        self._wrapper_create_haystacks()
+        os.makedirs("tests/test_outputs/indexes", exist_ok=True)
+        create_index(
+            [
+                f"tests/test_outputs/haystacks/{x}"
+                for x in os.listdir("tests/test_outputs/haystacks")
+                if x.endswith(".fasta")
+            ],
+            "tests/test_outputs/indexes",
+        )
 
-    def test_post_process_java_output(self): ...
+    # @unittest.skip(
+    #     "Skipping `test_pep_search` as it's run automatically by `test_post_process_java_output`"
+    # )
+    def _wrapper_pep_search(self):
+        from uniprot_tools.pep_search import pep_search
+
+        self._wrapper_create_index()
+        os.makedirs("tests/test_outputs/pep_searches", exist_ok=True)
+        with open("tests/test_data/test_peptides_2.json") as f:
+            pep_search(
+                json.load(f),
+                "tests/test_outputs/indexes",
+                intermediate_dir="tests/test_outputs/pep_searches",
+                delete_index_when_done=False,
+            )
+
+    def test_post_process_java_output(self):
+        from uniprot_tools.pep_search import post_process_java_output
+
+        self._wrapper_pep_search()
+        mapping = post_process_java_output(
+            files=[
+                f"tests/test_outputs/pep_searches/{x}"
+                for x in os.listdir("tests/test_outputs/pep_searches")
+                if x.endswith(".pepsearchres")
+            ],
+        )
+
+        self.assertTrue(len(mapping) > 0)
+        with open("tests/test_outputs/mapping.json", "w") as f:
+            json.dump({k: sorted(v) for k, v in mapping.items()}, f)
 
 
 class TestGetInfo(unittest.TestCase):

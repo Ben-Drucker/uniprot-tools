@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Run from root directory of repo
+# Run from level up from the root directory of repo
 
-coverage run --branch --source=. -m unittest tests.tests
+coverage run --branch --source=uniprot_tools -m unittest uniprot_tools.tests.tests
 coverage html --skip-empty

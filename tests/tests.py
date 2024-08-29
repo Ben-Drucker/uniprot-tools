@@ -20,22 +20,22 @@ class TestConcurrency(unittest.TestCase):
 
 class TestFasta(unittest.TestCase):
     def tearDown(self) -> None:
-        # for file in os.listdir("tests/test_outputs"):
-        #     os.remove(f"tests/test_outputs/{file}")
+        # for file in os.listdir("uniprot_tools/tests/test_outputs"):
+        #     os.remove(f"uniprot_tools/tests/test_outputs/{file}")
         return super().tearDown()
 
     def test_read_fasta(self):
-        from uniprot_tools.fasta_tools import read_fasta
+        from ..uniprot_tools.fasta_tools import read_fasta
 
         no_sort = read_fasta(
-            "tests/ground_truth/write_no_sort_yes_duplicates.fasta", sort_keys=False
+            "uniprot_tools/tests/ground_truth/write_no_sort_yes_duplicates.fasta", sort_keys=False
         )
-        yes_sort = read_fasta("tests/ground_truth/write_no_sort_yes_duplicates.fasta")
+        yes_sort = read_fasta("uniprot_tools/tests/ground_truth/write_no_sort_yes_duplicates.fasta")
 
         test_output = io.StringIO()
         with contextlib.redirect_stderr(test_output):
             yes_sort_prog = read_fasta(
-                "tests/ground_truth/write_no_sort_yes_duplicates.fasta",
+                "uniprot_tools/tests/ground_truth/write_no_sort_yes_duplicates.fasta",
                 show_progress=True,
             )
         self.assertRegex(
@@ -43,9 +43,9 @@ class TestFasta(unittest.TestCase):
             r"Bytes Read: 100%\|#+\| 684/684",
         )
 
-        with open("tests/ground_truth/read_fasta_test_no_sort.json") as f:
+        with open("uniprot_tools/tests/ground_truth/read_fasta_test_no_sort.json") as f:
             ground_truth_no_sort = json.load(f)
-        with open("tests/ground_truth/read_fasta_test_yes_sort.json") as f:
+        with open("uniprot_tools/tests/ground_truth/read_fasta_test_yes_sort.json") as f:
             ground_truth_yes_sort = json.load(f)
 
         self.assertEqual(list(no_sort.keys()), list(ground_truth_no_sort.keys()))
@@ -56,18 +56,18 @@ class TestFasta(unittest.TestCase):
         self.assertEqual(list(yes_sort_prog.values()), list(ground_truth_yes_sort.values()))
 
     def test_write_fasta(self):
-        from uniprot_tools.fasta_tools import write_fasta
+        from ..uniprot_tools.fasta_tools import write_fasta
 
-        with open("tests/test_data/test_peptides.json") as f:
+        with open("uniprot_tools/tests/test_data/test_peptides.json") as f:
             d = json.load(f)
             descriptions, peptides = list(d.keys()), list(d.values())
             file_names = [
-                "tests/test_outputs/write_no_sort_yes_duplicates.fasta",
-                "tests/test_outputs/write_yes_sort_yes_duplicates.fasta",
-                "tests/test_outputs/write_yes_sort_yes_duplicates_sort_by_seq.fasta",
-                "tests/test_outputs/write_no_sort_no_duplicates.fasta",
-                "tests/test_outputs/write_yes_sort_no_duplicates.fasta",
-                "tests/test_outputs/write_yes_sort_no_duplicates_sort_by_seq.fasta",
+                "uniprot_tools/tests/test_outputs/write_no_sort_yes_duplicates.fasta",
+                "uniprot_tools/tests/test_outputs/write_yes_sort_yes_duplicates.fasta",
+                "uniprot_tools/tests/test_outputs/write_yes_sort_yes_duplicates_sort_by_seq.fasta",
+                "uniprot_tools/tests/test_outputs/write_no_sort_no_duplicates.fasta",
+                "uniprot_tools/tests/test_outputs/write_yes_sort_no_duplicates.fasta",
+                "uniprot_tools/tests/test_outputs/write_yes_sort_no_duplicates_sort_by_seq.fasta",
             ]
             write_fasta(peptides, descriptions, file_names[0], do_sort=False, only_unique=False)
             write_fasta(peptides, descriptions, file_names[1], do_sort=True, only_unique=False)
@@ -96,21 +96,13 @@ class TestFasta(unittest.TestCase):
 
 class TestPepSearch(unittest.TestCase):
     def setUp(self) -> None:
-        from uniprot_tools.pep_search import (
-            create_haystacks,
-            create_index,
-            pep_search,
-            post_process_java_output,
-            process_tsvs,
-        )
-
         self._get_test_fasta()
 
         return super().setUp()
 
     # def tearDown(self) -> None:
-    #     for file in os.listdir("tests/test_outputs"):
-    #         os.remove(f"tests/test_outputs/{file}")
+    #     for file in os.listdir("uniprot_tools/tests/test_outputs"):
+    #         os.remove(f"uniprot_tools/tests/test_outputs/{file}")
 
     #     return super().tearDown()
 
@@ -123,7 +115,7 @@ class TestPepSearch(unittest.TestCase):
 
         with requests.get(url, stream=True, timeout=120) as r:
             r.raise_for_status()
-            with open("tests/test_data/test_uniprot_sprot.fasta.gz", "wb") as f:
+            with open("uniprot_tools/tests/test_data/test_uniprot_sprot.fasta.gz", "wb") as f:
                 for chunk in tqdm.tqdm(
                     r.iter_content(chunk_size=2**20),
                     total=int(np.ceil(int(r.headers["Content-Length"]) / 2**20)),
@@ -132,20 +124,20 @@ class TestPepSearch(unittest.TestCase):
                 ):
                     f.write(chunk)
 
-        with open("tests/test_data/test_uniprot_sprot-plaintext.fasta", "wt") as plain_f:
-            with gzip.open("tests/test_data/test_uniprot_sprot.fasta.gz", "rt") as gzip_f:
+        with open("uniprot_tools/tests/test_data/test_uniprot_sprot-plaintext.fasta", "wt") as plain_f:
+            with gzip.open("uniprot_tools/tests/test_data/test_uniprot_sprot.fasta.gz", "rt") as gzip_f:
                 plain_f.write(gzip_f.read())
 
-        os.remove("tests/test_data/test_uniprot_sprot.fasta.gz")
+        os.remove("uniprot_tools/tests/test_data/test_uniprot_sprot.fasta.gz")
 
     def _wrapper_create_haystacks(self):
-        from uniprot_tools.pep_search import create_haystacks
+        from ..uniprot_tools.pep_search import create_haystacks
 
-        test_fasta = "tests/test_data/test_uniprot_sprot-plaintext.fasta"
+        test_fasta = "uniprot_tools/tests/test_data/test_uniprot_sprot-plaintext.fasta"
         with open(test_fasta) as f:
             num_lines = sum(1 for _ in f)
 
-        haystack_dir = "tests/test_outputs/haystacks"
+        haystack_dir = "uniprot_tools/tests/test_outputs/haystacks"
         if os.path.exists(haystack_dir):
             shutil.rmtree(haystack_dir)
         os.makedirs(haystack_dir, exist_ok=True)
@@ -162,62 +154,62 @@ class TestPepSearch(unittest.TestCase):
         )
         self.assertTrue(5 < len(num_haystacks_files) < 8)
 
-        os.remove("tests/test_data/test_uniprot_sprot-plaintext.fasta")
+        os.remove("uniprot_tools/tests/test_data/test_uniprot_sprot-plaintext.fasta")
 
     # @unittest.skip(
     #     "Skipping `test_create_index` as it's run automatically by `test_post_process_java_output`"
     # )
     def _wrapper_create_index(self):
-        from uniprot_tools.pep_search import create_index
+        from ..uniprot_tools.pep_search import create_index
 
         self._wrapper_create_haystacks()
-        os.makedirs("tests/test_outputs/indexes", exist_ok=True)
+        os.makedirs("uniprot_tools/tests/test_outputs/indexes", exist_ok=True)
         create_index(
             [
-                f"tests/test_outputs/haystacks/{x}"
-                for x in os.listdir("tests/test_outputs/haystacks")
+                f"uniprot_tools/tests/test_outputs/haystacks/{x}"
+                for x in os.listdir("uniprot_tools/tests/test_outputs/haystacks")
                 if x.endswith(".fasta")
             ],
-            "tests/test_outputs/indexes",
+            "uniprot_tools/tests/test_outputs/indexes",
         )
 
     # @unittest.skip(
     #     "Skipping `test_pep_search` as it's run automatically by `test_post_process_java_output`"
     # )
     def _wrapper_pep_search(self):
-        from uniprot_tools.pep_search import pep_search
+        from ..uniprot_tools.pep_search import pep_search
 
         self._wrapper_create_index()
-        os.makedirs("tests/test_outputs/pep_searches", exist_ok=True)
-        with open("tests/test_data/test_peptides_2.json") as f:
+        os.makedirs("uniprot_tools/tests/test_outputs/pep_searches", exist_ok=True)
+        with open("uniprot_tools/tests/test_data/test_peptides_2.json") as f:
             pep_search(
                 json.load(f),
-                "tests/test_outputs/indexes",
-                intermediate_dir="tests/test_outputs/pep_searches",
+                "uniprot_tools/tests/test_outputs/indexes",
+                intermediate_dir="uniprot_tools/tests/test_outputs/pep_searches",
                 delete_index_when_done=False,
             )
 
     def test_post_process_java_output(self):
-        from uniprot_tools.pep_search import post_process_java_output
+        from ..uniprot_tools.pep_search import post_process_java_output
 
         self._wrapper_pep_search()
         mapping = post_process_java_output(
             files=[
-                f"tests/test_outputs/pep_searches/{x}"
-                for x in os.listdir("tests/test_outputs/pep_searches")
+                f"uniprot_tools/tests/test_outputs/pep_searches/{x}"
+                for x in os.listdir("uniprot_tools/tests/test_outputs/pep_searches")
                 if x.endswith(".pepsearchres")
             ],
         )
 
         self.assertTrue(len(mapping) > 0)
-        with open("tests/test_outputs/mapping.json", "w") as f:
+        with open("uniprot_tools/tests/test_outputs/mapping.json", "w") as f:
             json.dump({k: sorted(v) for k, v in mapping.items()}, f)
 
 
 class TestGetInfo(unittest.TestCase):
     def setUp(self) -> None:
 
-        with open("tests/test_data/test_ids.json") as f:
+        with open("uniprot_tools/tests/test_data/test_ids.json") as f:
             ids = json.load(f)
             self.uniprotkb_ids = ids["uniprotkb_ids"]
             self.uniparc_ids = ids["uniparc_ids"]
@@ -249,7 +241,7 @@ class TestGetInfo(unittest.TestCase):
         return super().setUp()
 
     def _url_test(self, knowledge_base):
-        from uniprot_tools.get_info import accession_to_prot_info
+        from ..uniprot_tools.get_info import accession_to_prot_info
 
         urls = accession_to_prot_info(
             self.__dict__[f"{knowledge_base}_ids"],
@@ -257,15 +249,15 @@ class TestGetInfo(unittest.TestCase):
             knowledge_base=knowledge_base,
             get_urls_only=True,
         )
-        with open(f"tests/ground_truth/{knowledge_base}_urls.json") as f:
+        with open(f"uniprot_tools/tests/ground_truth/{knowledge_base}_urls.json") as f:
             ground_truth_urls = json.load(f)
         self.assertEqual(urls, ground_truth_urls)
 
     def _info_test(self, knowledge_base):
         from pandas.testing import assert_frame_equal
 
-        from uniprot_tools.get_info import accession_to_prot_info
-        from uniprot_tools.pep_search import process_tsvs
+        from ..uniprot_tools.get_info import accession_to_prot_info
+        from ..uniprot_tools.pep_search import process_tsvs
 
         tsvs = accession_to_prot_info(
             self.__dict__[f"{knowledge_base}_ids"],
@@ -276,7 +268,7 @@ class TestGetInfo(unittest.TestCase):
         assert tsvs  # for linter purposes
         this_table = process_tsvs(tsvs)
 
-        ground_truth_table = pd.read_csv(f"tests/ground_truth/{knowledge_base}_info_table.csv")
+        ground_truth_table = pd.read_csv(f"uniprot_tools/tests/ground_truth/{knowledge_base}_info_table.csv")
 
         assert_frame_equal(this_table, ground_truth_table)
 

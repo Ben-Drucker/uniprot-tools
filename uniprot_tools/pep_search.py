@@ -8,7 +8,7 @@ import tqdm
 from termcolor import colored
 from tqdm.asyncio import tqdm_asyncio
 
-from uniprot_tools import this_dir
+from . import this_dir
 
 
 def _system_call(command: str):

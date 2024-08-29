@@ -16,7 +16,7 @@ def _system_call(command: str):
     if not re.search("java -jar.*PeptideMatchCMD", command):
         raise ValueError(f"Invalid command: {command}")
     with open(os.devnull, "w") as devnull:
-        proc = subprocess.run(cmds, stderr=subprocess.PIPE, stdout=devnull)
+        proc = subprocess.run(cmds, stderr=subprocess.PIPE, stdout=devnull, shell=False)
     error_text = proc.stderr.decode("utf-8")
     end_code = proc.returncode
     if end_code != 0:

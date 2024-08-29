@@ -187,11 +187,3 @@ def parallel_requests(
         num_workers=num_concurrent,
         **prog_bar_kwargs,
     )
-
-
-if __name__ == "__main__":
-    # urls = [f"https://camp.bicnirrh.res.in/seqDisp.php?id=CAMPSQ{i}" for i in range(1, 24815)]
-    # results = parallel_requests(urls, num_concurrent=25)
-    # with open("results.pkl", "wb") as f:
-    #     pickle.dump(results, f)
-    results = pickle.load(open("results.pkl", "rb"))

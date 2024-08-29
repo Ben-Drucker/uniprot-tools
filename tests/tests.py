@@ -124,8 +124,12 @@ class TestPepSearch(unittest.TestCase):
                 ):
                     f.write(chunk)
 
-        with open("uniprot_tools/tests/test_data/test_uniprot_sprot-plaintext.fasta", "wt") as plain_f:
-            with gzip.open("uniprot_tools/tests/test_data/test_uniprot_sprot.fasta.gz", "rt") as gzip_f:
+        with open(
+            "uniprot_tools/tests/test_data/test_uniprot_sprot-plaintext.fasta", "wt"
+        ) as plain_f:
+            with gzip.open(
+                "uniprot_tools/tests/test_data/test_uniprot_sprot.fasta.gz", "rt"
+            ) as gzip_f:
                 plain_f.write(gzip_f.read())
 
         os.remove("uniprot_tools/tests/test_data/test_uniprot_sprot.fasta.gz")
@@ -243,6 +247,7 @@ class TestGetInfo(unittest.TestCase):
     def _url_test(self, knowledge_base):
         # from ..uniprot_tools.get_info import accession_to_prot_info
         from ..uniprot_tools import get_info
+
         accession_to_prot_info = get_info.accession_to_prot_info
 
         urls = accession_to_prot_info(
@@ -270,7 +275,9 @@ class TestGetInfo(unittest.TestCase):
         assert tsvs  # for linter purposes
         this_table = process_tsvs(tsvs)
 
-        ground_truth_table = pd.read_csv(f"uniprot_tools/tests/ground_truth/{knowledge_base}_info_table.csv")
+        ground_truth_table = pd.read_csv(
+            f"uniprot_tools/tests/ground_truth/{knowledge_base}_info_table.csv"
+        )
 
         assert_frame_equal(this_table, ground_truth_table)
 

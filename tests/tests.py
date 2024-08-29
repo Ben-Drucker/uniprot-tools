@@ -242,6 +242,7 @@ class TestGetInfo(unittest.TestCase):
 
     def _url_test(self, knowledge_base):
         from ..uniprot_tools.get_info import accession_to_prot_info
+        from ..uniprot_tools import get_info
 
         urls = accession_to_prot_info(
             self.__dict__[f"{knowledge_base}_ids"],

@@ -9,4 +9,4 @@
 
 ### Python tools to speed up, simplify, and extend the capabilities of the [UniProt](https://uniprot.org) API.
 
-To access the full API documentation, click [here](http://.com)
+To access the full API documentation, click [here](https://ben-drucker.github.io/uniprot-tools/)

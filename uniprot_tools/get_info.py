@@ -1,18 +1,17 @@
-import re, warnings
-from typing import Literal
-
-import tqdm
-
+import re, requests, tqdm, warnings
 from .concurrency_tools import TqdmParallel, request_worker
+from typing import Literal
 
 
 def accession_to_prot_info(
     accessions: list[str] | list[int],
-    columns: list[str],
+    format_: Literal["tsv", "json"] = "tsv",
+    columns: list[str] | None = None,
     knowledge_base: Literal["uniprotkb", "uniparc", "taxonomy"] = "uniprotkb",
     num_simultaneous_requests: int = 100,
     get_urls_only: bool = False,
-) -> list[str] | None:
+    compressed_download: bool = False,
+) -> list[str]:
     """
 
     Parameters
@@ -91,30 +90,37 @@ def accession_to_prot_info(
         query_str = (
             "query=" + f"({query_specifier}:" + f")+OR+({query_specifier}:".join(chunk) + ")"
         )
-        fields_str = "fields=" + ",".join(columns)
-        fmt = "format=tsv"
+        if columns is None:
+            assert format_ == "json", "`columns` must be specified if `format` is not `tsv`."
+            fmt = "format=json"
+            fields_str = ""
+        else:
+            fields_str = "fields=" + ",".join(columns) + "&"
+            fmt = "format=tsv"
         url = (
             f"https://rest.uniprot.org/{knowledge_base}/search?"
-            f"{fields_str}&{query_str}&{fmt}&size={len(chunk)}"
+            f"{fields_str}{query_str}&{fmt}&size={len(chunk)}"
+            f"&compressed={str(bool(compressed_download)).lower()}"
         )
         urls.append(url)
     assert len(urls) >= len(accessions) // CHUNK_SIZE
-    res = None
-    try:
-        if get_urls_only:
-            return urls
+    if get_urls_only:
+        return urls
+    else:
+        res = TqdmParallel.tqdm_starmap(
+            worker_fn=request_worker,
+            worker_args=[(url,) for url in urls],
+            num_workers=num_simultaneous_requests,
+            processes_or_threads="threads",
+        )
+    assert res
+    new_res = []
+    for res_i in res:
+        if isinstance(res_i, requests.HTTPError):
+            warnings.warn(str(res_i), category=UserWarning)
         else:
-            res = TqdmParallel.tqdm_starmap(
-                worker_fn=request_worker,
-                worker_args=[(url,) for url in urls],
-                num_workers=num_simultaneous_requests,
-                processes_or_threads="threads",
-            )
-    except Exception as e:
-        warnings.warn(message=str(e), category=RuntimeWarning)
-        return res
-
-    return res
+            new_res.append(str(res_i))
+    return new_res
 
 
 # if __name__ == "__main__":

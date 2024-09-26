@@ -264,7 +264,7 @@ class TestGetInfo(unittest.TestCase):
         from pandas.testing import assert_frame_equal
 
         from ..uniprot_tools.get_info import accession_to_prot_info
-        from ..uniprot_tools.pep_search import process_tsvs
+        from ..uniprot_tools.pep_search import process_uniprot_output
 
         tsvs = accession_to_prot_info(
             self.__dict__[f"{knowledge_base}_ids"],
@@ -273,7 +273,7 @@ class TestGetInfo(unittest.TestCase):
         )
         self.assertIsNotNone(tsvs)
         assert tsvs  # for linter purposes
-        this_table = process_tsvs(tsvs)
+        this_table = process_uniprot_output(tsvs)
 
         ground_truth_table = pd.read_csv(
             f"uniprot_tools/tests/ground_truth/{knowledge_base}_info_table.csv"

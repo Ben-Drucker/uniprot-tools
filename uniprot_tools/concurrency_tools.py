@@ -1,9 +1,10 @@
-import random, time, warnings
-from multiprocessing import cpu_count
-from typing import Callable, Iterable, Literal
-
-import requests, tqdm
+import gzip, io, os, random, requests, time, tqdm, traceback, warnings
 from multiprocess import pool as mpp
+from multiprocessing import cpu_count
+from termcolor import colored
+from typing import Any, Callable, Iterable, Literal, TypeVar
+
+T = TypeVar("T")
 
 
 class TqdmParallel:
@@ -12,14 +13,14 @@ class TqdmParallel:
     @classmethod
     def tqdm_starmap(
         cls,
-        worker_fn: Callable,
+        worker_fn: Callable[..., T],
         worker_args: list[tuple],
         num_workers=cpu_count() - 1,
         cleanup_fn=lambda: None,
         processes_or_threads: Literal["processes", "threads"] = "processes",
         tqdm_class=tqdm.tqdm,
         **tqdm_kwargs,
-    ):
+    ) -> list[T] | None:
         """Run a function in parallel with tqdm
 
         Parameters
@@ -56,9 +57,9 @@ class TqdmParallel:
 
         def end_actions(
             pool: mpp.Pool | mpp.ThreadPool | None,
-            partial_results: list,
+            partial_results: list[T],
             num_expected_results: int,
-        ):
+        ) -> list[T] | None:
             tqdm.tqdm()
             if pool is not None:
                 pool.terminate()
@@ -78,7 +79,7 @@ class TqdmParallel:
         if "desc" not in tqdm_kwargs:
             tqdm_kwargs["desc"] = "Progress: "
         if "bar_format" not in tqdm_kwargs:
-            tqdm_kwargs["bar_format"] = "{desc}{percentage:3.0f}%|{bar:25}{r_bar}"
+            tqdm_kwargs["bar_format"] = "{desc} {percentage:3.0f}% {bar:25}"
         try:
             match processes_or_threads:
                 case "processes":
@@ -95,17 +96,17 @@ class TqdmParallel:
         except IndexError as e:
             if str(e) != "pop from an empty deque":
                 print(e)
-                return end_actions(pool, results, len(worker_args))
+                res = end_actions(pool, results, len(worker_args))
             else:
                 return end_actions(pool, results, len(worker_args))
         except KeyboardInterrupt:
             return end_actions(pool, results, len(worker_args))
         except Exception as e:
-            print(e)
+            print(colored("\n\t".join(traceback.format_exc().split("\n")), color="red"))
             return end_actions(pool, results, len(worker_args))
 
         cleanup_fn()
-        print("Parallel tasks successfully finished!")
+        # print("Parallel tasks successfully finished!")
         return results
 
     @classmethod
@@ -132,18 +133,44 @@ class TqdmParallel:
 
 
 def request_worker(
-    url: str, method: Literal["GET", "POST"] = "GET", request_kwargs: dict | None = None
+    url: str,
+    method: Literal["GET", "POST"] = "GET",
+    post_data: dict | None = None,
+    stream_and_dump_path: str | None = None,
+    request_kwargs: dict | None = None,
 ) -> str | requests.HTTPError:
     if request_kwargs is None:
         request_kwargs = {}
     if "timeout" not in request_kwargs:
         request_kwargs["timeout"] = 5
 
+    assert method in ["GET", "POST"], f"method must be GET or POST. It was {method}."
+
     def inner_main():
+        if method == "POST":
+            if "data" in request_kwargs and post_data is not None:
+                raise ValueError("Cannot use both `post_data` and `request_kwargs['data']`")
+
+            request_kwargs["data"] = post_data
         with requests.request(method, url, **request_kwargs) as r:
-            if r.status_code == 200:
-                return r.text
-            else:
+            try:
+                r.raise_for_status()
+                if stream_and_dump_path is None:
+                    # return either text or bytes
+                    try:
+                        with gzip.GzipFile(fileobj=io.BytesIO(r.content)) as f:
+                            decoded = f.read().decode("utf-8")
+                            return decoded
+                    except gzip.BadGzipFile as e:
+                        if "not a gzipped file" not in str(e).lower():
+                            raise e from None
+                        return r.text
+                else:
+                    with open(stream_and_dump_path, "wb") as f:
+                        for chunk in r.iter_content(chunk_size=2**10):
+                            f.write(chunk)
+                    return stream_and_dump_path
+            except requests.exceptions.HTTPError:
                 msg = f"Got status code {r.status_code} from {url}. Response: {r.text}"
                 warnings.warn(msg)
                 return requests.HTTPError(msg)
@@ -161,16 +188,23 @@ def request_worker(
 
 def parallel_requests(
     urls: list[str],
+    post_datas: list[dict | None] | None = None,
     num_concurrent: int | Literal["num_urls", "num_cores"] = "num_cores",
     request_kwargs: dict | None = None,
     prog_bar_kwargs: dict | None = None,
     method: Literal["GET", "POST"] = "GET",
+    stream_and_dump_dir: str | None = None,
 ):
     if prog_bar_kwargs is None:
         prog_bar_kwargs = {}
 
+    if stream_and_dump_dir is not None:
+        if not os.path.exists(stream_and_dump_dir):
+            os.makedirs(stream_and_dump_dir)
+
     if request_kwargs is None:
         request_kwargs = {}
+    request_kwargs.update({"stream": True})
     match num_concurrent:
         case "num_urls":
             num_concurrent = len(urls)
@@ -181,9 +215,22 @@ def parallel_requests(
                 num_concurrent, int
             ), "num_concurrent must be an int if not 'num_urls' or 'num_cores'"
 
+    if stream_and_dump_dir is not None:
+        paths = [
+            os.path.join(stream_and_dump_dir, f"download-{i}.download") for i in range(len(urls))
+        ]
+    else:
+        paths = [None] * len(urls)
+
+    if post_datas is None:
+        zip_iter = zip(urls, [None] * len(urls), paths)
+    else:
+        zip_iter = zip(urls, post_datas, paths)
+
     return TqdmParallel.tqdm_starmap(
         request_worker,
-        [(url, method, request_kwargs) for url in urls],
+        [(url, method, post_data, dump_path, request_kwargs) for url, post_data, dump_path in zip_iter],
         num_workers=num_concurrent,
+        processes_or_threads="threads",
         **prog_bar_kwargs,
     )

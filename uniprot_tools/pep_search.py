@@ -273,7 +273,7 @@ def _unstringify(string: str):
 
 
 def process_uniprot_output(string_structures: list[str]):
-    """Turn Uniprot text TSVs, JSONs, or XMLs into one, combined pandas `DataFrame`, `dict`, or \
+    """Turn Uniprot text TSVs, JSONs, or XMLs into one, combined pandas `pd.DataFrame`, `dict`, or \
         `ElementTree`.
 
     Parameters

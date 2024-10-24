@@ -180,13 +180,13 @@
             </div>
         
 
-    </li><li class="">
+    </li><li class="private">
         
         
         
 
         
-            <div class="itemName"><code><a href="#request_worker" class="internal-link" title="uniprot_tools.concurrency_tools.request_worker">request<wbr></wbr>_worker</a></code>
+            <div class="itemName"><code><a href="#_request_worker" class="internal-link" title="uniprot_tools.concurrency_tools._request_worker">_request<wbr></wbr>_worker</a></code>
             </div>
         
 
@@ -196,8 +196,21 @@
         
          
 
+        <div class="childrenKindTitle">Variables</div>
+        <ul>
+    
+    <li class="">
         
-         
+        
+        
+
+        
+            <div class="itemName"><code><a href="#T" class="internal-link" title="uniprot_tools.concurrency_tools.T">T</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
 
         
          
@@ -256,6 +269,16 @@
             </div>
         
 
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="uniprot_tools.this_dir.html" class="internal-link" title="uniprot_tools.this_dir">this<wbr></wbr>_dir</a></code>
+            </div>
+        
+
     </li>
 </ul> 
 
@@ -309,7 +332,7 @@
         </div>
 
         <div class="moduleDocstring">
-          <div><p class="undocumented">Undocumented</p></div>
+          <div><p>Tools to do things in parallel with progress bars</p></div>
         </div>
 
         <div id="splitTables">
@@ -325,11 +348,16 @@
     
     <td>Function</td>
     <td><code><a href="#parallel_requests" class="internal-link" title="uniprot_tools.concurrency_tools.parallel_requests">parallel<wbr></wbr>_requests</a></code></td>
+    <td>Do HTTP(S) requests in parallel for GET or POST</td>
+  </tr><tr class="typevariable">
+    
+    <td>Type Variable</td>
+    <td><code><a href="#T" class="internal-link" title="uniprot_tools.concurrency_tools.T">T</a></code></td>
     <td><span class="undocumented">Undocumented</span></td>
-  </tr><tr class="function">
+  </tr><tr class="function private">
     
     <td>Function</td>
-    <td><code><a href="#request_worker" class="internal-link" title="uniprot_tools.concurrency_tools.request_worker">request<wbr></wbr>_worker</a></code></td>
+    <td><code><a href="#_request_worker" class="internal-link" title="uniprot_tools.concurrency_tools._request_worker">_request<wbr></wbr>_worker</a></code></td>
     <td><span class="undocumented">Undocumented</span></td>
   </tr>
 </table>
@@ -351,7 +379,7 @@
   <div class="functionHeader">
     
     
-    <span class="py-keyword">def</span> <span class="py-defname">parallel_requests</span><span class="function-signature">(urls: <code><a href="https://docs.python.org/3/library/stdtypes.html#list" class="intersphinx-link">list</a>[<wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a>]</code>, num_concurrent: <code><a href="https://docs.python.org/3/library/functions.html#int" class="intersphinx-link">int</a> | <a href="https://docs.python.org/3/library/typing.html#typing.Literal" class="intersphinx-link">Literal</a>[<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">num_urls</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">num_cores</span><span class="rst-variable-quote">'</span>]</code> = <span class="rst-variable-quote">'</span><span class="rst-variable-string">num_cores</span><span class="rst-variable-quote">'</span>, request_kwargs: <code><a href="https://docs.python.org/3/library/stdtypes.html#dict" class="intersphinx-link">dict</a> | <a href="https://docs.python.org/3/library/constants.html#None" class="intersphinx-link">None</a></code> = <a href="https://docs.python.org/3/library/constants.html#None" class="intersphinx-link">None</a>, prog_bar_kwargs: <code><a href="https://docs.python.org/3/library/stdtypes.html#dict" class="intersphinx-link">dict</a> | <a href="https://docs.python.org/3/library/constants.html#None" class="intersphinx-link">None</a></code> = <a href="https://docs.python.org/3/library/constants.html#None" class="intersphinx-link">None</a>, method: <code><a href="https://docs.python.org/3/library/typing.html#typing.Literal" class="intersphinx-link">Literal</a>[<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">GET</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">POST</span><span class="rst-variable-quote">'</span>]</code> = <span class="rst-variable-quote">'</span><span class="rst-variable-string">GET</span><span class="rst-variable-quote">'</span>)</span>:
+    <span class="py-keyword">def</span> <span class="py-defname">parallel_requests</span><span class="function-signature">(<br />    urls: <code><a href="https://docs.python.org/3/library/stdtypes.html#list" class="intersphinx-link">list</a>[<wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a>]</code>, <br />    post_datas: <code><a href="https://docs.python.org/3/library/stdtypes.html#list" class="intersphinx-link">list</a>[<wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#dict" class="intersphinx-link">dict</a> | <a href="https://docs.python.org/3/library/constants.html#None" class="intersphinx-link">None</a>] | <a href="https://docs.python.org/3/library/constants.html#None" class="intersphinx-link">None</a></code> = <a href="https://docs.python.org/3/library/constants.html#None" class="intersphinx-link">None</a>, <br />    num_concurrent: <code><a href="https://docs.python.org/3/library/functions.html#int" class="intersphinx-link">int</a> | <a href="https://docs.python.org/3/library/typing.html#typing.Literal" class="intersphinx-link">Literal</a>[<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">num_urls</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">num_cores</span><span class="rst-variable-quote">'</span>]</code> = <span class="rst-variable-quote">'</span><span class="rst-variable-string">num_cores</span><span class="rst-variable-quote">'</span>, <br />    request_kwargs: <code><a href="https://docs.python.org/3/library/stdtypes.html#dict" class="intersphinx-link">dict</a> | <a href="https://docs.python.org/3/library/constants.html#None" class="intersphinx-link">None</a></code> = <a href="https://docs.python.org/3/library/constants.html#None" class="intersphinx-link">None</a>, <br />    prog_bar_kwargs: <code><a href="https://docs.python.org/3/library/stdtypes.html#dict" class="intersphinx-link">dict</a> | <a href="https://docs.python.org/3/library/constants.html#None" class="intersphinx-link">None</a></code> = <a href="https://docs.python.org/3/library/constants.html#None" class="intersphinx-link">None</a>, <br />    method: <code><a href="https://docs.python.org/3/library/typing.html#typing.Literal" class="intersphinx-link">Literal</a>[<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">GET</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">POST</span><span class="rst-variable-quote">'</span>]</code> = <span class="rst-variable-quote">'</span><span class="rst-variable-string">GET</span><span class="rst-variable-quote">'</span>, <br />    stream_and_dump_dir: <code><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a> | <a href="https://docs.python.org/3/library/constants.html#None" class="intersphinx-link">None</a></code> = <a href="https://docs.python.org/3/library/constants.html#None" class="intersphinx-link">None</a>)  ➔  <code><a href="https://docs.python.org/3/library/stdtypes.html#list" class="intersphinx-link">list</a>[<wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a> | requests.HTTPError] | <a href="https://docs.python.org/3/library/constants.html#None" class="intersphinx-link">None</a></code></span>:
     
     <a class="headerLink" href="#parallel_requests" title="uniprot_tools.concurrency_tools.parallel_requests">
       
@@ -361,23 +389,47 @@
   </div>
   <div class="docstring functionBody">
     
-    <div><p class="undocumented">Undocumented</p></div>
+    <div><p>Do HTTP(S) requests in parallel for GET or POST</p><table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">urls:</span><code><a href="https://docs.python.org/3/library/stdtypes.html#list" class="intersphinx-link">list</a>[<wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a>]</code></td><td class="fieldArgDesc">List of URLs to request</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">post<wbr></wbr>_datas:</span><code><a href="https://docs.python.org/3/library/stdtypes.html#list" class="intersphinx-link">list</a>[<wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#dict" class="intersphinx-link">dict</a> | <a href="https://docs.python.org/3/library/constants.html#None" class="intersphinx-link">None</a>] | <a href="https://docs.python.org/3/library/constants.html#None" class="intersphinx-link">None</a></code></td><td class="fieldArgDesc">If <tt class="rst-docutils rst-literal">method</tt> is POST, list of dictionaries of POST data</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">num<wbr></wbr>_concurrent:</span><code><a href="https://docs.python.org/3/library/functions.html#int" class="intersphinx-link">int</a> | <a href="https://docs.python.org/3/library/typing.html#typing.Literal" class="intersphinx-link">Literal</a>[<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">num_urls</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">num_cores</span><span class="rst-variable-quote">'</span>]</code></td><td class="fieldArgDesc">The number of concurrent requests. If 'num_urls', the number of requests is equal to             the number of URLs. If 'num_cores', the number of requests is equal to the number of cores on the machine.</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">request<wbr></wbr>_kwargs:</span><code><a href="https://docs.python.org/3/library/stdtypes.html#dict" class="intersphinx-link">dict</a> | <a href="https://docs.python.org/3/library/constants.html#None" class="intersphinx-link">None</a></code></td><td class="fieldArgDesc">Keyword arguments to pass to requests.request</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">prog<wbr></wbr>_bar<wbr></wbr>_kwargs:</span><code><a href="https://docs.python.org/3/library/stdtypes.html#dict" class="intersphinx-link">dict</a> | <a href="https://docs.python.org/3/library/constants.html#None" class="intersphinx-link">None</a></code></td><td class="fieldArgDesc">Keyword arguments to pass to tqdm.tqdm (the progress bar)</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">method:</span><code><a href="https://docs.python.org/3/library/typing.html#typing.Literal" class="intersphinx-link">Literal</a>[<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">GET</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">POST</span><span class="rst-variable-quote">'</span>]</code></td><td class="fieldArgDesc">Either 'GET' or 'POST'</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">stream<wbr></wbr>_and<wbr></wbr>_dump<wbr></wbr>_dir:</span><code><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a> | <a href="https://docs.python.org/3/library/constants.html#None" class="intersphinx-link">None</a></code></td><td class="fieldArgDesc">If not None, stream the response and save to this directory.</td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code><a href="https://docs.python.org/3/library/stdtypes.html#list" class="intersphinx-link">list</a>[<wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a> | requests.HTTPError] | <a href="https://docs.python.org/3/library/constants.html#None" class="intersphinx-link">None</a></code></td><td class="fieldArgDesc">If <code><a href="https://docs.python.org/3/library/constants.html#None" class="intersphinx-link">None</a></code>, then there was an error. Otherwise, a list of strings containing response text             or requests.HTTPError objects. If <tt class="rst-docutils rst-literal">stream_and_dump_dir</tt> is not None,             this variable will simply be returned, not response text.</td></tr></table></div>
   </div>
-</div><div class="basefunction">
+</div><div class="basetypevariable">
   
   
-  <a name="uniprot_tools.concurrency_tools.request_worker">
+  <a name="uniprot_tools.concurrency_tools.T">
     
   </a>
-  <a name="request_worker">
+  <a name="T">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">T</span> =
+    
+    <a class="headerLink" href="#T" title="uniprot_tools.concurrency_tools.T">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code><a href="https://docs.python.org/3/library/typing.html#typing.TypeVar" class="intersphinx-link">TypeVar</a>(<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">T</span><span class="rst-variable-quote">'</span>)</code></pre></td></tr></table>
+  </div>
+</div><div class="basefunction private">
+  
+  
+  <a name="uniprot_tools.concurrency_tools._request_worker">
+    
+  </a>
+  <a name="_request_worker">
     
   </a>
   <div class="functionHeader">
     
     
-    <span class="py-keyword">def</span> <span class="py-defname">request_worker</span><span class="function-signature">(url: <code><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a></code>, method: <code><a href="https://docs.python.org/3/library/typing.html#typing.Literal" class="intersphinx-link">Literal</a>[<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">GET</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">POST</span><span class="rst-variable-quote">'</span>]</code> = <span class="rst-variable-quote">'</span><span class="rst-variable-string">GET</span><span class="rst-variable-quote">'</span>, request_kwargs: <code><a href="https://docs.python.org/3/library/stdtypes.html#dict" class="intersphinx-link">dict</a> | <a href="https://docs.python.org/3/library/constants.html#None" class="intersphinx-link">None</a></code> = <a href="https://docs.python.org/3/library/constants.html#None" class="intersphinx-link">None</a>) -&gt; <code><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a> | requests.HTTPError</code></span>:
+    <span class="py-keyword">def</span> <span class="py-defname">_request_worker</span><span class="function-signature">(<br />    url: <code><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a></code>, <br />    method: <code><a href="https://docs.python.org/3/library/typing.html#typing.Literal" class="intersphinx-link">Literal</a>[<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">GET</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">POST</span><span class="rst-variable-quote">'</span>]</code> = <span class="rst-variable-quote">'</span><span class="rst-variable-string">GET</span><span class="rst-variable-quote">'</span>, <br />    post_data: <code><a href="https://docs.python.org/3/library/stdtypes.html#dict" class="intersphinx-link">dict</a> | <a href="https://docs.python.org/3/library/constants.html#None" class="intersphinx-link">None</a></code> = <a href="https://docs.python.org/3/library/constants.html#None" class="intersphinx-link">None</a>, <br />    stream_and_dump_path: <code><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a> | <a href="https://docs.python.org/3/library/constants.html#None" class="intersphinx-link">None</a></code> = <a href="https://docs.python.org/3/library/constants.html#None" class="intersphinx-link">None</a>, <br />    request_kwargs: <code><a href="https://docs.python.org/3/library/stdtypes.html#dict" class="intersphinx-link">dict</a> | <a href="https://docs.python.org/3/library/constants.html#None" class="intersphinx-link">None</a></code> = <a href="https://docs.python.org/3/library/constants.html#None" class="intersphinx-link">None</a>)  ➔  <code><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a> | requests.HTTPError</code></span>:
     
-    <a class="headerLink" href="#request_worker" title="uniprot_tools.concurrency_tools.request_worker">
+    <a class="headerLink" href="#_request_worker" title="uniprot_tools.concurrency_tools._request_worker">
       
       
       ¶

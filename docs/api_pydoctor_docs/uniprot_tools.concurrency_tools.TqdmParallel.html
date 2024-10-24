@@ -232,13 +232,13 @@
             </div>
         
 
-    </li><li class="">
+    </li><li class="private">
         
         
         
 
         
-            <div class="itemName"><code><a href="uniprot_tools.concurrency_tools.html#request_worker" class="internal-link" title="uniprot_tools.concurrency_tools.request_worker">request<wbr></wbr>_worker</a></code>
+            <div class="itemName"><code><a href="uniprot_tools.concurrency_tools.html#_request_worker" class="internal-link" title="uniprot_tools.concurrency_tools._request_worker">_request<wbr></wbr>_worker</a></code>
             </div>
         
 
@@ -248,8 +248,21 @@
         
          
 
+        <div class="childrenKindTitle">Variables</div>
+        <ul>
+    
+    <li class="">
         
-         
+        
+        
+
+        
+            <div class="itemName"><code><a href="uniprot_tools.concurrency_tools.html#T" class="internal-link" title="uniprot_tools.concurrency_tools.T">T</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
 
         
          
@@ -326,7 +339,7 @@
   <div class="functionHeader">
     
     @<a href="https://docs.python.org/3/library/functions.html#classmethod" class="intersphinx-link">classmethod</a><br />
-    <span class="py-keyword">def</span> <span class="py-defname">tqdm_starmap</span><span class="function-signature">(cls, worker_fn: <code><a href="https://docs.python.org/3/library/typing.html#typing.Callable" class="intersphinx-link">Callable</a></code>, worker_args: <code><a href="https://docs.python.org/3/library/stdtypes.html#list" class="intersphinx-link">list</a>[<wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#tuple" class="intersphinx-link">tuple</a>]</code>, num_workers=<a href="https://docs.python.org/3/library/multiprocessing.html#multiprocessing.cpu_count" class="intersphinx-link">cpu_count</a>() - 1, cleanup_fn=lambda: None, processes_or_threads: <code><a href="https://docs.python.org/3/library/typing.html#typing.Literal" class="intersphinx-link">Literal</a>[<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">processes</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">threads</span><span class="rst-variable-quote">'</span>]</code> = <span class="rst-variable-quote">'</span><span class="rst-variable-string">processes</span><span class="rst-variable-quote">'</span>, tqdm_class=tqdm.tqdm, **tqdm_kwargs)</span>:
+    <span class="py-keyword">def</span> <span class="py-defname">tqdm_starmap</span><span class="function-signature">(<br />    cls, <br />    worker_fn: <code><a href="https://docs.python.org/3/library/typing.html#typing.Callable" class="intersphinx-link">Callable</a>[<wbr></wbr><span class="rst-variable-ellipsis">...</span>, <wbr></wbr><a href="uniprot_tools.concurrency_tools.html#T" class="internal-link" title="uniprot_tools.concurrency_tools.T">T</a>]</code>, <br />    worker_args: <code><a href="https://docs.python.org/3/library/stdtypes.html#list" class="intersphinx-link">list</a>[<wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#tuple" class="intersphinx-link">tuple</a>]</code>, <br />    num_workers=<a href="https://docs.python.org/3/library/multiprocessing.html#multiprocessing.cpu_count" class="intersphinx-link">cpu_count</a>() - 1, <br />    cleanup_fn=lambda: None, <br />    processes_or_threads: <code><a href="https://docs.python.org/3/library/typing.html#typing.Literal" class="intersphinx-link">Literal</a>[<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">processes</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">threads</span><span class="rst-variable-quote">'</span>]</code> = <span class="rst-variable-quote">'</span><span class="rst-variable-string">processes</span><span class="rst-variable-quote">'</span>, <br />    tqdm_class=tqdm.tqdm, **<br />    tqdm_kwargs)  ➔  <code><a href="https://docs.python.org/3/library/stdtypes.html#list" class="intersphinx-link">list</a>[<wbr></wbr><a href="uniprot_tools.concurrency_tools.html#T" class="internal-link" title="uniprot_tools.concurrency_tools.T">T</a>] | <a href="https://docs.python.org/3/library/constants.html#None" class="intersphinx-link">None</a></code></span>:
     
     <a class="headerLink" href="#tqdm_starmap" title="uniprot_tools.concurrency_tools.TqdmParallel.tqdm_starmap">
       
@@ -336,7 +349,7 @@
   </div>
   <div class="docstring functionBody">
     
-    <div><p>Run a function in parallel with tqdm</p><table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">worker<wbr></wbr>_fn:</span><code><a href="https://docs.python.org/3/library/typing.html#typing.Callable" class="intersphinx-link">Callable</a></code></td><td class="fieldArgDesc">The function to run in parallel</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">worker<wbr></wbr>_args:</span><code><a href="https://docs.python.org/3/library/stdtypes.html#list" class="intersphinx-link">list</a>[<wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#tuple" class="intersphinx-link">tuple</a>]</code></td><td class="fieldArgDesc">List of tuples of arguments to pass to the function. Each tuple is passed to the                 <tt class="rst-docutils rst-literal">worker_fn</tt>'s <tt class="rst-docutils rst-literal">*args</tt>.</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">num<wbr></wbr>_workers</span></td><td class="fieldArgDesc">The number of workers to use. Defaults to the number of cores - 1.</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">cleanup<wbr></wbr>_fn</span></td><td class="fieldArgDesc">The function to call when the workers are finished. Defaults to a no-op function.</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">processes<wbr></wbr>_or<wbr></wbr>_threads:</span><code><a href="https://docs.python.org/3/library/typing.html#typing.Literal" class="intersphinx-link">Literal</a>[<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">processes</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">threads</span><span class="rst-variable-quote">'</span>]</code></td><td class="fieldArgDesc">Whether to use multiprocessing or threading. Defaults to multiprocessing.</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">tqdm<wbr></wbr>_class</span></td><td class="fieldArgDesc">The tqdm class to use. Defaults to <tt class="rst-docutils rst-literal">tqdm.tqdm</tt>, but could also be, for example,                 <tt class="rst-docutils rst-literal">tqdm.tqdm_notebook</tt>.</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">**tqdm<wbr></wbr>_kwargs</span></td><td class="fieldArgDesc"><p>Additional keyword arguments to pass to the tqdm class. Some possible options include:</p>
+    <div><p>Run a function in parallel with tqdm</p><table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">worker<wbr></wbr>_fn:</span><code><a href="https://docs.python.org/3/library/typing.html#typing.Callable" class="intersphinx-link">Callable</a>[<wbr></wbr><span class="rst-variable-ellipsis">...</span>, <wbr></wbr><a href="uniprot_tools.concurrency_tools.html#T" class="internal-link" title="uniprot_tools.concurrency_tools.T">T</a>]</code></td><td class="fieldArgDesc">The function to run in parallel</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">worker<wbr></wbr>_args:</span><code><a href="https://docs.python.org/3/library/stdtypes.html#list" class="intersphinx-link">list</a>[<wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#tuple" class="intersphinx-link">tuple</a>]</code></td><td class="fieldArgDesc">List of tuples of arguments to pass to the function. Each tuple is passed to the                 <tt class="rst-docutils rst-literal">worker_fn</tt>'s <tt class="rst-docutils rst-literal">*args</tt>.</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">num<wbr></wbr>_workers</span></td><td class="fieldArgDesc">The number of workers to use. Defaults to the number of cores - 1.</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">cleanup<wbr></wbr>_fn</span></td><td class="fieldArgDesc">The function to call when the workers are finished. Defaults to a no-op function.</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">processes<wbr></wbr>_or<wbr></wbr>_threads:</span><code><a href="https://docs.python.org/3/library/typing.html#typing.Literal" class="intersphinx-link">Literal</a>[<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">processes</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">threads</span><span class="rst-variable-quote">'</span>]</code></td><td class="fieldArgDesc">Whether to use multiprocessing or threading. Defaults to multiprocessing.</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">tqdm<wbr></wbr>_class</span></td><td class="fieldArgDesc">The tqdm class to use. Defaults to <tt class="rst-docutils rst-literal">tqdm.tqdm</tt>, but could also be, for example,                 <tt class="rst-docutils rst-literal">tqdm.tqdm_notebook</tt>.</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">**tqdm<wbr></wbr>_kwargs</span></td><td class="fieldArgDesc"><p>Additional keyword arguments to pass to the tqdm class. Some possible options include:</p>
 <pre class="rst-literal-block">
 desc=
 leave=
@@ -349,7 +362,7 @@ dynamic_ncols=
 smoothing=
 position=
 </pre>
-</td></tr></table></div>
+</td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code><a href="https://docs.python.org/3/library/stdtypes.html#list" class="intersphinx-link">list</a>[<wbr></wbr><a href="uniprot_tools.concurrency_tools.html#T" class="internal-link" title="uniprot_tools.concurrency_tools.T">T</a>] | <a href="https://docs.python.org/3/library/constants.html#None" class="intersphinx-link">None</a></code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
   </div>
 </div><div class="baseclassmethod private">
   
@@ -363,7 +376,7 @@ position=
   <div class="functionHeader">
     
     @<a href="https://docs.python.org/3/library/functions.html#classmethod" class="intersphinx-link">classmethod</a><br />
-    <span class="py-keyword">def</span> <span class="py-defname">_istarmap</span><span class="function-signature">(cls, p: <code><a href="https://docs.python.org/3/library/multiprocessing.html#multiprocessing.pool.Pool" class="intersphinx-link">mpp.Pool</a> | <a href="https://docs.python.org/3/library/multiprocessing.html#multiprocessing.pool.ThreadPool" class="intersphinx-link">mpp.ThreadPool</a></code>, func: <code><a href="https://docs.python.org/3/library/typing.html#typing.Callable" class="intersphinx-link">Callable</a></code>, iterable: <code><a href="https://docs.python.org/3/library/typing.html#typing.Iterable" class="intersphinx-link">Iterable</a></code>, chunksize=1)</span>:
+    <span class="py-keyword">def</span> <span class="py-defname">_istarmap</span><span class="function-signature">(<br />    cls, <br />    p: <code>mpp.Pool | mpp.ThreadPool</code>, <br />    func: <code><a href="https://docs.python.org/3/library/typing.html#typing.Callable" class="intersphinx-link">Callable</a></code>, <br />    iterable: <code><a href="https://docs.python.org/3/library/typing.html#typing.Iterable" class="intersphinx-link">Iterable</a></code>, <br />    chunksize=1)</span>:
     
     <a class="headerLink" href="#_istarmap" title="uniprot_tools.concurrency_tools.TqdmParallel._istarmap">
       

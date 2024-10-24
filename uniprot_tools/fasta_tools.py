@@ -1,3 +1,5 @@
+"""``.fasta`` file reading and writing."""
+
 import os
 from typing import Literal
 

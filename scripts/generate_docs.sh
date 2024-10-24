@@ -3,6 +3,7 @@ cd uniprot_tools
 rm -rf ../docs/api_pydoctor_docs/
 mkdir -p ../docs/api_pydoctor_docs
 pydoctor \
+    --config ../../conf.py \
     --docformat numpy \
     --project-name uniprot_tools \
     --intersphinx https://docs.python.org/3/objects.inv \

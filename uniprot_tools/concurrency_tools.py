@@ -1,8 +1,10 @@
+"""Tools to do things in parallel with progress bars"""
+
 import gzip, io, os, random, requests, time, tqdm, traceback, warnings
 from multiprocess import pool as mpp
 from multiprocessing import cpu_count
 from termcolor import colored
-from typing import Any, Callable, Iterable, Literal, TypeVar
+from typing import Callable, Iterable, Literal, TypeVar
 
 T = TypeVar("T")
 
@@ -132,7 +134,7 @@ class TqdmParallel:
         return (item for chunk in result for item in chunk)
 
 
-def request_worker(
+def _request_worker(
     url: str,
     method: Literal["GET", "POST"] = "GET",
     post_data: dict | None = None,
@@ -194,7 +196,33 @@ def parallel_requests(
     prog_bar_kwargs: dict | None = None,
     method: Literal["GET", "POST"] = "GET",
     stream_and_dump_dir: str | None = None,
-):
+) -> (list[str | requests.HTTPError] | None):
+    """Do HTTP(S) requests in parallel for GET or POST
+
+    Parameters
+    ----------
+    ``urls`` :
+        List of URLs to request
+    ``post_datas`` :
+        If ``method`` is POST, list of dictionaries of POST data
+    ``num_concurrent`` :
+        The number of concurrent requests. If 'num_urls', the number of requests is equal to \
+            the number of URLs. If 'num_cores', the number of requests is equal to the number of cores on the machine.
+    ``request_kwargs`` :
+        Keyword arguments to pass to requests.request
+    ``prog_bar_kwargs`` :
+        Keyword arguments to pass to tqdm.tqdm (the progress bar)
+    ``method`` :
+        Either 'GET' or 'POST'
+    ``stream_and_dump_dir`` :
+        If not None, stream the response and save to this directory.
+
+    Returns
+    -------
+        If `None`, then there was an error. Otherwise, a list of strings containing response text \
+            or requests.HTTPError objects. If ``stream_and_dump_dir`` is not None, \
+            this variable will simply be returned, not response text.
+    """
     if prog_bar_kwargs is None:
         prog_bar_kwargs = {}
 
@@ -228,8 +256,11 @@ def parallel_requests(
         zip_iter = zip(urls, post_datas, paths)
 
     return TqdmParallel.tqdm_starmap(
-        request_worker,
-        [(url, method, post_data, dump_path, request_kwargs) for url, post_data, dump_path in zip_iter],
+        _request_worker,
+        [
+            (url, method, post_data, dump_path, request_kwargs)
+            for url, post_data, dump_path in zip_iter
+        ],
         num_workers=num_concurrent,
         processes_or_threads="threads",
         **prog_bar_kwargs,

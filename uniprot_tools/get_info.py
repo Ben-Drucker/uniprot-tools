@@ -1,5 +1,5 @@
 import re, requests, tqdm, warnings
-from .concurrency_tools import TqdmParallel, request_worker
+from .concurrency_tools import TqdmParallel, _request_worker
 from typing import Literal
 
 

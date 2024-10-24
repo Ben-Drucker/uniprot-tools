@@ -206,16 +206,6 @@
         
 
         
-            <div class="itemName"><code><a href="#get_verts" class="internal-link" title="uniprot_tools.pep_search.get_verts">get<wbr></wbr>_verts</a></code>
-            </div>
-        
-
-    </li><li class="">
-        
-        
-        
-
-        
             <div class="itemName"><code><a href="#pep_search" class="internal-link" title="uniprot_tools.pep_search.pep_search">pep<wbr></wbr>_search</a></code>
             </div>
         
@@ -236,17 +226,7 @@
         
 
         
-            <div class="itemName"><code><a href="#process_tsvs" class="internal-link" title="uniprot_tools.pep_search.process_tsvs">process<wbr></wbr>_tsvs</a></code>
-            </div>
-        
-
-    </li><li class="">
-        
-        
-        
-
-        
-            <div class="itemName"><code><a href="#tqdm_gather_with_concurrency" class="internal-link" title="uniprot_tools.pep_search.tqdm_gather_with_concurrency">tqdm<wbr></wbr>_gather<wbr></wbr>_with<wbr></wbr>_concurrency</a></code>
+            <div class="itemName"><code><a href="#process_uniprot_output" class="internal-link" title="uniprot_tools.pep_search.process_uniprot_output">process<wbr></wbr>_uniprot<wbr></wbr>_output</a></code>
             </div>
         
 
@@ -267,6 +247,16 @@
 
         
             <div class="itemName"><code><a href="#_system_call" class="internal-link" title="uniprot_tools.pep_search._system_call">_system<wbr></wbr>_call</a></code>
+            </div>
+        
+
+    </li><li class="private">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#_unstringify" class="internal-link" title="uniprot_tools.pep_search._unstringify">_unstringify</a></code>
             </div>
         
 
@@ -346,6 +336,16 @@
 
         
             <div class="itemName"><code><a href="uniprot_tools.pep_search.html" class="internal-link" title="uniprot_tools.pep_search">pep<wbr></wbr>_search</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="uniprot_tools.this_dir.html" class="internal-link" title="uniprot_tools.this_dir">this<wbr></wbr>_dir</a></code>
             </div>
         
 
@@ -431,11 +431,6 @@
     <td>TODO</td>
   </tr><tr class="function">
     
-    <td>Async Function</td>
-    <td><code><a href="#get_verts" class="internal-link" title="uniprot_tools.pep_search.get_verts">get<wbr></wbr>_verts</a></code></td>
-    <td><span class="undocumented">Undocumented</span></td>
-  </tr><tr class="function">
-    
     <td>Function</td>
     <td><code><a href="#pep_search" class="internal-link" title="uniprot_tools.pep_search.pep_search">pep<wbr></wbr>_search</a></code></td>
     <td>Searches for matching proteins form given peptides in a given index</td>
@@ -447,13 +442,8 @@
   </tr><tr class="function">
     
     <td>Function</td>
-    <td><code><a href="#process_tsvs" class="internal-link" title="uniprot_tools.pep_search.process_tsvs">process<wbr></wbr>_tsvs</a></code></td>
-    <td>Turn Uniprot text tsvs into one, combined pandas <code>DataFrame</code></td>
-  </tr><tr class="function">
-    
-    <td>Async Function</td>
-    <td><code><a href="#tqdm_gather_with_concurrency" class="internal-link" title="uniprot_tools.pep_search.tqdm_gather_with_concurrency">tqdm<wbr></wbr>_gather<wbr></wbr>_with<wbr></wbr>_concurrency</a></code></td>
-    <td><span class="undocumented">Undocumented</span></td>
+    <td><code><a href="#process_uniprot_output" class="internal-link" title="uniprot_tools.pep_search.process_uniprot_output">process<wbr></wbr>_uniprot<wbr></wbr>_output</a></code></td>
+    <td>Turn Uniprot text TSVs, JSONs, or XMLs into one, combined pandas <code><a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" class="intersphinx-link">pd.DataFrame</a></code>, <code><a href="https://docs.python.org/3/library/stdtypes.html#dict" class="intersphinx-link">dict</a></code>, or         <code><a href="https://docs.python.org/3/library/xml.etree.elementtree.html#module-xml.etree.ElementTree" class="intersphinx-link">ElementTree</a></code>.</td>
   </tr><tr class="variable">
     
     <td>Variable</td>
@@ -468,6 +458,11 @@
     
     <td>Function</td>
     <td><code><a href="#_system_call" class="internal-link" title="uniprot_tools.pep_search._system_call">_system<wbr></wbr>_call</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="function private">
+    
+    <td>Function</td>
+    <td><code><a href="#_unstringify" class="internal-link" title="uniprot_tools.pep_search._unstringify">_unstringify</a></code></td>
     <td><span class="undocumented">Undocumented</span></td>
   </tr>
 </table>
@@ -489,7 +484,7 @@
   <div class="functionHeader">
     
     
-    <span class="py-keyword">def</span> <span class="py-defname">create_haystacks</span><span class="function-signature">(fasta_files: <code><a href="https://docs.python.org/3/library/stdtypes.html#list" class="intersphinx-link">list</a>[<wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a>]</code>, haystack_dir: <code><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a></code>, num_lines: <code><a href="https://docs.python.org/3/library/stdtypes.html#list" class="intersphinx-link">list</a>[<wbr></wbr><a href="https://docs.python.org/3/library/functions.html#int" class="intersphinx-link">int</a>] | <a href="https://docs.python.org/3/library/constants.html#None" class="intersphinx-link">None</a></code> = <a href="https://docs.python.org/3/library/constants.html#None" class="intersphinx-link">None</a>, seqs_per_chunk: <code><a href="https://docs.python.org/3/library/functions.html#int" class="intersphinx-link">int</a></code> = 1000000, haystack_str: <code><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a></code> = <span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>)</span>:
+    <span class="py-keyword">def</span> <span class="py-defname">create_haystacks</span><span class="function-signature">(<br />    fasta_files: <code><a href="https://docs.python.org/3/library/stdtypes.html#list" class="intersphinx-link">list</a>[<wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a>]</code>, <br />    haystack_dir: <code><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a></code>, <br />    num_lines: <code><a href="https://docs.python.org/3/library/stdtypes.html#list" class="intersphinx-link">list</a>[<wbr></wbr><a href="https://docs.python.org/3/library/functions.html#int" class="intersphinx-link">int</a>] | <a href="https://docs.python.org/3/library/constants.html#None" class="intersphinx-link">None</a></code> = <a href="https://docs.python.org/3/library/constants.html#None" class="intersphinx-link">None</a>, <br />    seqs_per_chunk: <code><a href="https://docs.python.org/3/library/functions.html#int" class="intersphinx-link">int</a></code> = 1000000, <br />    haystack_str: <code><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a></code> = <span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>)</span>:
     
     <a class="headerLink" href="#create_haystacks" title="uniprot_tools.pep_search.create_haystacks">
       
@@ -513,7 +508,7 @@
   <div class="functionHeader">
     
     
-    <span class="py-keyword">def</span> <span class="py-defname">create_index</span><span class="function-signature">(fasta_files: <code><a href="https://docs.python.org/3/library/stdtypes.html#list" class="intersphinx-link">list</a>[<wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a>]</code>, index_dir: <code><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a></code>, num_search_procs: <code><a href="https://docs.python.org/3/library/functions.html#int" class="intersphinx-link">int</a></code> = <a href="https://docs.python.org/3/library/multiprocessing.html#multiprocessing.cpu_count" class="intersphinx-link">multiprocessing.cpu_count</a>())</span>:
+    <span class="py-keyword">def</span> <span class="py-defname">create_index</span><span class="function-signature">(<br />    fasta_files: <code><a href="https://docs.python.org/3/library/stdtypes.html#list" class="intersphinx-link">list</a>[<wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a>]</code>, <br />    index_dir: <code><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a></code>, <br />    num_search_procs: <code><a href="https://docs.python.org/3/library/functions.html#int" class="intersphinx-link">int</a></code> = <a href="https://docs.python.org/3/library/multiprocessing.html#multiprocessing.cpu_count" class="intersphinx-link">multiprocessing.cpu_count</a>())</span>:
     
     <a class="headerLink" href="#create_index" title="uniprot_tools.pep_search.create_index">
       
@@ -537,7 +532,7 @@
   <div class="functionHeader">
     
     
-    <span class="py-keyword">def</span> <span class="py-defname">extract_pep_to_info</span><span class="function-signature">(combined_df: <code><a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" class="intersphinx-link">pd.DataFrame</a></code>, peptide_to_accessions: <code><a href="https://docs.python.org/3/library/stdtypes.html#dict" class="intersphinx-link">dict</a>[<wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a>, <wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#set" class="intersphinx-link">set</a>[<wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a>]]</code>)</span>:
+    <span class="py-keyword">def</span> <span class="py-defname">extract_pep_to_info</span><span class="function-signature">(<br />    combined_df: <code><a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" class="intersphinx-link">pd.DataFrame</a></code>, <br />    peptide_to_accessions: <code><a href="https://docs.python.org/3/library/stdtypes.html#dict" class="intersphinx-link">dict</a>[<wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a>, <wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#set" class="intersphinx-link">set</a>[<wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a>]]</code>)</span>:
     
     <a class="headerLink" href="#extract_pep_to_info" title="uniprot_tools.pep_search.extract_pep_to_info">
       
@@ -552,30 +547,6 @@
 </div><div class="basefunction">
   
   
-  <a name="uniprot_tools.pep_search.get_verts">
-    
-  </a>
-  <a name="get_verts">
-    
-  </a>
-  <div class="functionHeader">
-    
-    
-    <span class="py-keyword">async def</span> <span class="py-defname">get_verts</span><span class="function-signature">(peptide_to_accessions: <code><a href="https://docs.python.org/3/library/stdtypes.html#dict" class="intersphinx-link">dict</a>[<wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a>, <wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#set" class="intersphinx-link">set</a>[<wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a>]]</code>, on_chunk=0, out_of=0)</span>:
-    
-    <a class="headerLink" href="#get_verts" title="uniprot_tools.pep_search.get_verts">
-      
-      
-      ¶
-    </a>
-  </div>
-  <div class="docstring functionBody">
-    
-    <div><p class="undocumented">Undocumented</p></div>
-  </div>
-</div><div class="basefunction">
-  
-  
   <a name="uniprot_tools.pep_search.pep_search">
     
   </a>
@@ -585,7 +556,7 @@
   <div class="functionHeader">
     
     
-    <span class="py-keyword">def</span> <span class="py-defname">pep_search</span><span class="function-signature">(peptides: <code><a href="https://docs.python.org/3/library/stdtypes.html#list" class="intersphinx-link">list</a>[<wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a>]</code>, index_dir: <code><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a></code>, num_search_procs: <code><a href="https://docs.python.org/3/library/functions.html#int" class="intersphinx-link">int</a></code> = <a href="https://docs.python.org/3/library/multiprocessing.html#multiprocessing.cpu_count" class="intersphinx-link">multiprocessing.cpu_count</a>(), intermediate_dir: <code><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a></code> = <span class="rst-variable-quote">'</span><span class="rst-variable-string">pep_searches</span><span class="rst-variable-quote">'</span>, delete_index_when_done: <code><a href="https://docs.python.org/3/library/functions.html#bool" class="intersphinx-link">bool</a></code> = <a href="https://docs.python.org/3/library/constants.html#False" class="intersphinx-link">False</a>)</span>:
+    <span class="py-keyword">def</span> <span class="py-defname">pep_search</span><span class="function-signature">(<br />    peptides: <code><a href="https://docs.python.org/3/library/stdtypes.html#list" class="intersphinx-link">list</a>[<wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a>]</code>, <br />    index_dir: <code><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a></code>, <br />    num_search_procs: <code><a href="https://docs.python.org/3/library/functions.html#int" class="intersphinx-link">int</a></code> = <a href="https://docs.python.org/3/library/multiprocessing.html#multiprocessing.cpu_count" class="intersphinx-link">multiprocessing.cpu_count</a>(), <br />    intermediate_dir: <code><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a></code> = <span class="rst-variable-quote">'</span><span class="rst-variable-string">pep_searches</span><span class="rst-variable-quote">'</span>, <br />    delete_index_when_done: <code><a href="https://docs.python.org/3/library/functions.html#bool" class="intersphinx-link">bool</a></code> = <a href="https://docs.python.org/3/library/constants.html#False" class="intersphinx-link">False</a>)</span>:
     
     <a class="headerLink" href="#pep_search" title="uniprot_tools.pep_search.pep_search">
       
@@ -609,7 +580,7 @@
   <div class="functionHeader">
     
     
-    <span class="py-keyword">def</span> <span class="py-defname">post_process_java_output</span><span class="function-signature">(max_concurrency: <code><a href="https://docs.python.org/3/library/functions.html#int" class="intersphinx-link">int</a></code> = 4, files: <code><a href="https://docs.python.org/3/library/stdtypes.html#list" class="intersphinx-link">list</a>[<wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a>]</code> = []) -&gt; <code><a href="https://docs.python.org/3/library/stdtypes.html#dict" class="intersphinx-link">dict</a>[<wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a>, <wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#set" class="intersphinx-link">set</a>[<wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a>]]</code></span>:
+    <span class="py-keyword">def</span> <span class="py-defname">post_process_java_output</span><span class="function-signature">(<br />    max_concurrency: <code><a href="https://docs.python.org/3/library/functions.html#int" class="intersphinx-link">int</a></code> = 4, <br />    files: <code><a href="https://docs.python.org/3/library/stdtypes.html#list" class="intersphinx-link">list</a>[<wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a>]</code> = [])  ➔  <code><a href="https://docs.python.org/3/library/stdtypes.html#dict" class="intersphinx-link">dict</a>[<wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a>, <wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#set" class="intersphinx-link">set</a>[<wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a>]]</code></span>:
     
     <a class="headerLink" href="#post_process_java_output" title="uniprot_tools.pep_search.post_process_java_output">
       
@@ -624,18 +595,18 @@
 </div><div class="basefunction">
   
   
-  <a name="uniprot_tools.pep_search.process_tsvs">
+  <a name="uniprot_tools.pep_search.process_uniprot_output">
     
   </a>
-  <a name="process_tsvs">
+  <a name="process_uniprot_output">
     
   </a>
   <div class="functionHeader">
     
     
-    <span class="py-keyword">def</span> <span class="py-defname">process_tsvs</span><span class="function-signature">(string_tsvs: <code><a href="https://docs.python.org/3/library/stdtypes.html#list" class="intersphinx-link">list</a>[<wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a>]</code>) -&gt; <code><a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" class="intersphinx-link">pd.DataFrame</a></code></span>:
+    <span class="py-keyword">def</span> <span class="py-defname">process_uniprot_output</span><span class="function-signature">(<br />    string_structures: <code><a href="https://docs.python.org/3/library/stdtypes.html#list" class="intersphinx-link">list</a>[<wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a>]</code>)</span>:
     
-    <a class="headerLink" href="#process_tsvs" title="uniprot_tools.pep_search.process_tsvs">
+    <a class="headerLink" href="#process_uniprot_output" title="uniprot_tools.pep_search.process_uniprot_output">
       
       
       ¶
@@ -643,31 +614,7 @@
   </div>
   <div class="docstring functionBody">
     
-    <div><p>Turn Uniprot text tsvs into one, combined pandas <code>DataFrame</code></p><table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">string<wbr></wbr>_tsvs:</span><code><a href="https://docs.python.org/3/library/stdtypes.html#list" class="intersphinx-link">list</a>[<wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a>]</code></td><td class="fieldArgDesc">List of tsv strings. Note: each tsv must have the same columns.</td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code><a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" class="intersphinx-link">pd.DataFrame</a></code></td><td class="fieldArgDesc">Table of combined results.</td></tr></table></div>
-  </div>
-</div><div class="basefunction">
-  
-  
-  <a name="uniprot_tools.pep_search.tqdm_gather_with_concurrency">
-    
-  </a>
-  <a name="tqdm_gather_with_concurrency">
-    
-  </a>
-  <div class="functionHeader">
-    
-    
-    <span class="py-keyword">async def</span> <span class="py-defname">tqdm_gather_with_concurrency</span><span class="function-signature">(*coroutines, max_concurrency=4, **tqdm_kwargs)</span>:
-    
-    <a class="headerLink" href="#tqdm_gather_with_concurrency" title="uniprot_tools.pep_search.tqdm_gather_with_concurrency">
-      
-      
-      ¶
-    </a>
-  </div>
-  <div class="docstring functionBody">
-    
-    <div><p class="undocumented">Undocumented</p></div>
+    <div><p>Turn Uniprot text TSVs, JSONs, or XMLs into one, combined pandas <code><a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" class="intersphinx-link">pd.DataFrame</a></code>, <code><a href="https://docs.python.org/3/library/stdtypes.html#dict" class="intersphinx-link">dict</a></code>, or         <code><a href="https://docs.python.org/3/library/xml.etree.elementtree.html#module-xml.etree.ElementTree" class="intersphinx-link">ElementTree</a></code>.</p><table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">string<wbr></wbr>_structures:</span><code><a href="https://docs.python.org/3/library/stdtypes.html#list" class="intersphinx-link">list</a>[<wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a>]</code></td><td class="fieldArgDesc">List of TSV, JSON, or XML strings. Note: if TSVs, each TSV must have the same columns.</td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td colspan="2">Table of combined results.</td></tr></table></div>
   </div>
 </div><div class="basevariable">
   
@@ -705,7 +652,7 @@
   <div class="functionHeader">
     
     
-    <span class="py-keyword">def</span> <span class="py-defname">_post_process_java_output_worker</span><span class="function-signature">(kwargs) -&gt; <code><a href="https://docs.python.org/3/library/stdtypes.html#dict" class="intersphinx-link">dict</a>[<wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a>, <wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#set" class="intersphinx-link">set</a>[<wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a>]]</code></span>:
+    <span class="py-keyword">def</span> <span class="py-defname">_post_process_java_output_worker</span><span class="function-signature">(<br />    kwargs)  ➔  <code><a href="https://docs.python.org/3/library/stdtypes.html#dict" class="intersphinx-link">dict</a>[<wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a>, <wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#set" class="intersphinx-link">set</a>[<wbr></wbr><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a>]]</code></span>:
     
     <a class="headerLink" href="#_post_process_java_output_worker" title="uniprot_tools.pep_search._post_process_java_output_worker">
       
@@ -729,9 +676,33 @@
   <div class="functionHeader">
     
     
-    <span class="py-keyword">def</span> <span class="py-defname">_system_call</span><span class="function-signature">(command)</span>:
+    <span class="py-keyword">def</span> <span class="py-defname">_system_call</span><span class="function-signature">(<br />    command: <code><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a></code>)</span>:
     
     <a class="headerLink" href="#_system_call" title="uniprot_tools.pep_search._system_call">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+  </div>
+</div><div class="basefunction private">
+  
+  
+  <a name="uniprot_tools.pep_search._unstringify">
+    
+  </a>
+  <a name="_unstringify">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">_unstringify</span><span class="function-signature">(<br />    string: <code><a href="https://docs.python.org/3/library/stdtypes.html#str" class="intersphinx-link">str</a></code>)</span>:
+    
+    <a class="headerLink" href="#_unstringify" title="uniprot_tools.pep_search._unstringify">
       
       
       ¶

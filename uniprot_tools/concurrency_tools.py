@@ -1,13 +1,15 @@
 """Tools to do things in parallel with progress bars"""
 
 import gzip, io, os, pickle, random, requests, time, tqdm, traceback, warnings
-from multiprocess import pool as mpp
+from multiprocessing import pool as mpp
 from multiprocessing import cpu_count
 from termcolor import colored
 from typing import Callable, Generator, Iterable, Literal, TypeVar
 
 T = TypeVar("T")
 
+# 107.72s user 10.58s system 363% cpu 32.540 total
+# 
 
 class TqdmParallel:
     """Class for running a function in parallel with tqdm"""

@@ -9,13 +9,11 @@ import shutil
 import subprocess
 import tqdm
 from . import this_dir
-from .concurrency_tools import TqdmParallel
+from .process_uniprot_output import process_uniprot_output
 from multiprocessing.pool import ThreadPool
 from shlex import split
 from termcolor import colored
 from textwrap import wrap
-from typing import Any
-from xml.etree import ElementTree
 
 
 def _system_call(command: str):
@@ -254,65 +252,6 @@ existence_codes = {
 }
 
 
-def _unstringify(string: str):
-    try:  # xml
-        return ElementTree.fromstring(string)
-    except ElementTree.ParseError:
-        try:  # json
-            jl: dict[Any, Any] = json.loads(string)
-            return jl
-        except json.decoder.JSONDecodeError:
-            try:  # tsv
-                return pd.read_csv(io.StringIO(string), sep="\t")
-            except pd.errors.ParserError:
-
-                raise ValueError(
-                    f"Could not determine string type of {string}; it could not be parsed as XML,"
-                    " JSON, or TSV (the allowed types)."
-                )
-
-
-def process_uniprot_output(string_structures: list[str]):
-    """Turn Uniprot text TSVs, JSONs, or XMLs into one, combined pandas `pd.DataFrame`, `dict`, or \
-        `ElementTree`.
-
-    Parameters
-    ----------
-    ``string_structures`` :
-        List of TSV, JSON, or XML strings. Note: if TSVs, each TSV must have the same columns.
-
-    Returns
-    -------
-        Table of combined results.
-    """
-    individual_results = TqdmParallel.tqdm_starmap(
-        _unstringify,
-        [(s,) for s in string_structures],
-        processes_or_threads="threads",
-    )
-    assert individual_results
-    representative = individual_results[0]
-    match representative:
-        case pd.DataFrame():
-            to_concat: list[pd.DataFrame] = []
-            for x in individual_results:
-                assert isinstance(x, pd.DataFrame)
-                to_concat.append(x)
-            return pd.concat(to_concat)
-        case dict():
-            to_merge: list[dict] = []
-            for x in individual_results:
-                assert isinstance(x, dict)
-                to_merge.append(x)
-            for e, d in enumerate(to_merge):
-                d[f"results-{e}"] = d.pop("results")
-            return {k: v for d in individual_results for k, v in d.items()}
-        case ElementTree.Element():
-            return individual_results[0]
-        case _:  # type: ignore
-            raise ValueError(f'Could not determine type of the input: "{individual_results[0]}"')
-
-
 def extract_pep_to_info(combined_df: pd.DataFrame, peptide_to_accessions: dict[str, set[str]]):
     """TODO
 
@@ -372,51 +311,54 @@ if __name__ == "__main__":
     from .get_info import accession_to_prot_info
 
     jsons = accession_to_prot_info(["P00519", "P06493"], format_="json", compressed_download=True)
+
     def jsons_to_pdb_dfs(jsons):
         read_in = process_uniprot_output(jsons)
         all_pdb_info = {
-                "Uniprot ID": [],
-                "PDB ID": [],
-                "Method": [],
-                "Resolution A": [],
-                "Chain IDs": [],
-                "Start Res": [],
-                "End Res": [],
-            }
+            "Uniprot ID": [],
+            "PDB ID": [],
+            "Method": [],
+            "Resolution A": [],
+            "Chain IDs": [],
+            "Start Res": [],
+            "End Res": [],
+        }
         assert isinstance(read_in, dict)
         for results_chunk in read_in.values():
             for result in results_chunk:
                 assert isinstance(result, dict)
-                for pdb in [d for d in result["uniProtKBCrossReferences"] if d["database"] == "PDB"]:
-                    all_pdb_info['PDB ID'].append(pdb['id'])
-                    all_pdb_info['Uniprot ID'].append(result['primaryAccession'])
-                    mini_df = pd.DataFrame.from_records(pdb['properties'])
-                    mini_df = mini_df.set_index('key').T
-                    res_a = mini_df.at['value', 'Resolution']
+                for pdb in [
+                    d for d in result["uniProtKBCrossReferences"] if d["database"] == "PDB"
+                ]:
+                    all_pdb_info["PDB ID"].append(pdb["id"])
+                    all_pdb_info["Uniprot ID"].append(result["primaryAccession"])
+                    mini_df = pd.DataFrame.from_records(pdb["properties"])
+                    mini_df = mini_df.set_index("key").T
+                    res_a = mini_df.at["value", "Resolution"]
                     numberic_part = re.search(r"^(\d+\.\d+)\s*.*$", res_a)
                     if numberic_part is not None:
-                        all_pdb_info['Resolution A'].append(float(numberic_part.group(1)))
+                        all_pdb_info["Resolution A"].append(float(numberic_part.group(1)))
                     else:
-                        all_pdb_info['Resolution A'].append(None)
-                    all_pdb_info['Method'].append(mini_df.at['value', 'Method'])
-                    id_extract = re.search(r"^([A-Z0-9/]+)=(\d+)-(\d+)", mini_df.at['value', 'Chains'])
+                        all_pdb_info["Resolution A"].append(None)
+                    all_pdb_info["Method"].append(mini_df.at["value", "Method"])
+                    id_extract = re.search(
+                        r"^([A-Z0-9/]+)=(\d+)-(\d+)", mini_df.at["value", "Chains"]
+                    )
                     if id_extract is not None:
-                        all_pdb_info['Chain IDs'].append(id_extract.group(1).split("/"))
-                        all_pdb_info['Start Res'].append(int(id_extract.group(2)))
-                        all_pdb_info['End Res'].append(int(id_extract.group(3)))
+                        all_pdb_info["Chain IDs"].append(id_extract.group(1).split("/"))
+                        all_pdb_info["Start Res"].append(int(id_extract.group(2)))
+                        all_pdb_info["End Res"].append(int(id_extract.group(3)))
                     else:
-                        all_pdb_info['Chain IDs'].append(None)
-                        all_pdb_info['Start Res'].append(None)
-                        all_pdb_info['End Res'].append(None)
-                    
+                        all_pdb_info["Chain IDs"].append(None)
+                        all_pdb_info["Start Res"].append(None)
+                        all_pdb_info["End Res"].append(None)
 
         all_pdb_df = pd.DataFrame(all_pdb_info)
         return all_pdb_df
 
-
     def get_best_res_for_range(pdb_df: pd.DataFrame, start: int, end: int):
-        subset = pdb_df[(pdb_df['Start Res'] <= start) & (pdb_df['End Res'] >= end)]
+        subset = pdb_df[(pdb_df["Start Res"] <= start) & (pdb_df["End Res"] >= end)]
         if len(subset) > 0:
-            return subset.sort_values('Resolution A').iloc[0]['PDB ID']
+            return subset.sort_values("Resolution A").iloc[0]["PDB ID"]
         else:
             raise ValueError(f"Could not find PDB entry for residue range {start}-{end}.")

@@ -1,10 +1,9 @@
 """``.fasta`` file reading and writing."""
 
 import os
-from typing import Literal
-
 import pandas as pd
 import tqdm
+from typing import Literal
 
 
 def read_fasta(infile: str, sort_keys: bool = True, show_progress: bool = False) -> dict[str, str]:
@@ -50,7 +49,7 @@ def read_fasta(infile: str, sort_keys: bool = True, show_progress: bool = False)
 
 def write_fasta(
     seqs: list[str],
-    seq_descriptions: list[str] | None,
+    seq_descriptions: list[str] | None = None,
     outfile: str = "output.fasta",
     do_sort: bool = True,
     only_unique: bool = True,

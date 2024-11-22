@@ -1,10 +1,10 @@
 """Tools to do things in parallel with progress bars"""
 
-import gzip, io, os, random, requests, time, tqdm, traceback, warnings
+import gzip, io, os, pickle, random, requests, time, tqdm, traceback, warnings
 from multiprocess import pool as mpp
 from multiprocessing import cpu_count
 from termcolor import colored
-from typing import Callable, Iterable, Literal, TypeVar
+from typing import Callable, Generator, Iterable, Literal, TypeVar
 
 T = TypeVar("T")
 
@@ -16,11 +16,12 @@ class TqdmParallel:
     def tqdm_starmap(
         cls,
         worker_fn: Callable[..., T],
-        worker_args: list[tuple],
+        worker_args: list[tuple] | Generator,
         num_workers=cpu_count() - 1,
         cleanup_fn=lambda: None,
         processes_or_threads: Literal["processes", "threads"] = "processes",
         tqdm_class=tqdm.tqdm,
+        n_args: int | None = None,
         **tqdm_kwargs,
     ) -> list[T] | None:
         """Run a function in parallel with tqdm
@@ -82,6 +83,17 @@ class TqdmParallel:
             tqdm_kwargs["desc"] = "Progress: "
         if "bar_format" not in tqdm_kwargs:
             tqdm_kwargs["bar_format"] = "{desc} {percentage:3.0f}% {bar:25}"
+
+        if isinstance(worker_args, list):
+            n_args = len(worker_args)
+        else:
+            if isinstance(worker_args, Generator):
+                if n_args is None:
+                    raise ValueError(
+                        "If `worker_args` is a Generator, the number of args (`n_args`) must be"
+                        " provided to the current function, `tqdm_starmap`."
+                    )
+
         try:
             match processes_or_threads:
                 case "processes":
@@ -92,20 +104,20 @@ class TqdmParallel:
                 for res in tqdm_class(
                     cls._istarmap(pool, worker_fn, worker_args),
                     **tqdm_kwargs,
-                    total=len(worker_args),
+                    total=n_args,
                 ):
                     results.append(res)
         except IndexError as e:
             if str(e) != "pop from an empty deque":
                 print(e)
-                res = end_actions(pool, results, len(worker_args))
+                res = end_actions(pool, results, n_args)
             else:
-                return end_actions(pool, results, len(worker_args))
+                return end_actions(pool, results, n_args)
         except KeyboardInterrupt:
-            return end_actions(pool, results, len(worker_args))
+            return end_actions(pool, results, n_args)
         except Exception as e:
             print(colored("\n\t".join(traceback.format_exc().split("\n")), color="red"))
-            return end_actions(pool, results, len(worker_args))
+            return end_actions(pool, results, n_args)
 
         cleanup_fn()
         # print("Parallel tasks successfully finished!")
@@ -196,7 +208,7 @@ def parallel_requests(
     prog_bar_kwargs: dict | None = None,
     method: Literal["GET", "POST"] = "GET",
     stream_and_dump_dir: str | None = None,
-) -> (list[str | requests.HTTPError] | None):
+) -> list[str | requests.HTTPError] | None:
     """Do HTTP(S) requests in parallel for GET or POST
 
     Parameters

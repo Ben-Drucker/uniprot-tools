@@ -2,5 +2,4 @@
 
 # Run from level up from the root directory of repo
 
-coverage run --branch --source=uniprot_tools -m unittest uniprot_tools.tests.tests
-coverage html --skip-empty
+python3.12 -m coverage run --branch --source=PkgContainer/uniprot_tools -m unittest PkgContainer.tests.tests

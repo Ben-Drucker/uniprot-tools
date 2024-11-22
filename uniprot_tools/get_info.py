@@ -159,4 +159,5 @@ def accession_to_prot_info(
     if process_output_into_DataFrame:
         new_res = process_uniprot_output(new_res)
         assert isinstance(new_res, pd.DataFrame)
+        new_res.reset_index(drop=True, inplace=True)
     return new_res
